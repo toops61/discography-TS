@@ -1,0 +1,44 @@
+@keyframes appears {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes disc-bounce {
+  0% {
+    transform: translateY(0);
+  }
+  90%{
+    transform: translateY(-4em);
+  }
+  100% {
+    transform: translateY(-4em);
+  }
+}
+
+@keyframes disc-rotate {
+  from {
+    transform: rotate(0);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+@keyframes shadow-grow {
+  0% {
+    scale: 3;
+  }
+  90%{
+    scale: 1;
+  }
+  100% {
+    scale: 1;
+  }
+}

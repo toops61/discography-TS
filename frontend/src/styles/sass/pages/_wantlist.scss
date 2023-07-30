@@ -1,0 +1,121 @@
+.wantlist-main {
+    width: 90%;
+    height: 90%;
+    background-color: black;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    overflow-y: scroll;
+    h1 {
+        margin: 1em 0;
+    }
+    .categorie {
+        margin: 1em 2em;
+        @include flexColumn;
+    }
+    .image-discs {
+        width: 10em;
+        height: 10em;
+        img {
+            @include imageFit;
+        }
+    }
+    .categories-container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+    .shown-discs {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        position: relative;
+        justify-content: center;
+    }
+    .disc-container {
+        position: relative;
+        @include flexColumn;
+        margin: 1em;
+        width: 12em;
+        min-height: 15em;
+        p {
+            font-size: 1.2em;
+        }
+        border: solid .1em;
+        border-radius: 1em;
+        padding: 1em;
+    }
+    .modify-icon {
+        position: absolute;
+        top: -0.5em;
+        left: -0.5em;
+        &::before {
+            @include icon('\f044',1.5em);
+        }
+    }
+    .delete-icon {
+        position: absolute;
+        top: -0.5em;
+        right: -0.5em;
+        background-color: #fff;
+        border-radius: 50%;
+        @include flexCenter;
+        &::before {
+            @include icon('\f057',1.5em);
+            color: rgb(175, 0, 0);
+        }
+    }
+    .cover-container {
+        width: 10em;
+        height: 10em;
+        @include flexCenter;
+        img {
+            @include imageFit;
+        }
+    }
+    .close-window {
+        position: absolute;
+        right: 0em;
+        top: -1em;
+        @include flexCenter;
+        padding: 0;
+        border: none;
+        &::before {
+            @include icon('\f057',2em)
+        }
+    }
+    .links-container {
+        @include flexCenter;
+    }
+    .add-new,.disco-link {
+        background-color: rgb(6, 221, 214);
+        border: solid .2em;
+        padding: .5em;
+        margin: 1em;
+        border-radius: .5em;
+        p {
+            font-size: 1.5em;
+            color: black;
+        }
+    }
+    .arrow-up {
+        position: fixed;
+        bottom: .5em;
+        right: .5em;
+        @include flexCenter;
+        &::before {
+            @include icon('\f139',2em);
+        }
+    }
+    @include tablette-version {
+        font-size: 3em;
+        .close-window {
+            right: 1em;
+        }
+        .arrow-up {
+            bottom: 3em;
+            right: 2em;
+        }
+      }
+}

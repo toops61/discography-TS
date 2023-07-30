@@ -1,0 +1,74 @@
+.form-page {
+    position: relative;
+    width: 80%;
+    background-color: black;
+    border: solid;
+    border-radius: 1em;
+    @include flexColumn;
+    h1 {
+        font-size: 2em;
+        margin: .5em 0;
+    }
+    .nav-pages {
+        position: absolute;
+        top: .5em;
+        right: .5em;
+        @include flexCenter;
+    }
+    .discs {
+        font-size: 1.5em;
+        margin: 0 .5em;
+    }
+    form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+        margin-bottom: 2em;
+    }
+    .disc-inputs {
+        width: 90%;
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: .5em;
+        align-items: flex-end;
+        &.checkbox {
+            justify-content: flex-start;
+            align-items: center;
+            input {
+                width: initial;
+            }
+        }
+        &.discog {
+            justify-content: flex-start;
+            input {
+                min-width: 20%;
+                width: fit-content;
+            }
+            .valid-arrow {
+                margin: 0 1em;
+                @include flexCenter;
+                &::before {
+                    @include icon('\f08e',2em);
+                }
+            }
+        }
+    }
+    label {
+        margin-right: .5em;
+        font-size: 1.4em;
+    }
+    input,select {
+        width: 90%;
+        color: black;
+        padding: .3em .5em;
+        font-size: 1.2em;
+    }
+    .buttons-container {
+        margin-top: 1em;
+        display: flex;
+        button {
+            margin: 0 .5em;
+        }
+    }
+}

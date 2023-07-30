@@ -1,0 +1,292 @@
+.disco-main {
+    position: relative;
+    width: 95%;
+    height: 90%;
+    background-color: black;
+    border: solid;
+    border-radius: 1em;
+    @include flexColumn;
+    overflow: hidden;
+    input {
+        color: black;
+    }
+    select {
+        color: black;
+        cursor: pointer;
+    }
+    .new-disc {
+        position: absolute;
+        top: .5em;
+        right: .5em;
+        font-size: 1.5em;
+    }
+    .filter-nav {
+        display: flex;
+        font-size: 1.5em;
+        margin-top: .5em;
+        @include tablette-version {
+            margin-top: 3em;
+        }
+        .filter-field {
+            margin-right: 1em;
+        }
+        label {
+            margin-right: .3em;
+        }
+        h2 {
+            font-size: 1em;
+        }
+    }
+    .title-container {
+        width: 100%;
+        @include flexCenter;
+        position: relative;
+    }
+    h1 {
+        margin: .5em 0;
+        font-size: 2em;
+    }
+    .max {
+        position: absolute;
+        right: 2vw;
+    }
+    .discs-container {
+        width: 95%;
+        flex: 1;
+        @include flexColumn;
+        overflow: hidden;
+    }
+    tbody,tr {
+        width: 99%;
+    }
+    thead {
+        width: 99%;
+        padding-right: 1.5%;
+    }
+    tbody {
+        margin-top: .5em;
+        overflow: auto;
+        display: flex;
+        flex-direction: column;
+    }
+    tr {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        position: relative;
+    }
+    th {
+        font-size: 1.1em;
+        @include flexCenter;
+        cursor: pointer;
+    }
+    .selected {
+        margin-left: .5em;
+        &.hide {
+            display: none;
+        }
+    }
+    .selected.up::before {
+        @include icon('\f0de');
+    }
+    .selected.down::before {
+        @include icon('\f0dd');
+    }
+
+    td {
+        @include flexCenter;
+        margin: .2em 0;
+        font-size: 1.2em;
+        overflow: hidden;
+        p {
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+    }
+    .light-row {
+        background-color: rgb(41, 41, 41);
+    }
+    .album-column,.artist-column {
+        width: 26vw;
+    }
+    .artist-column {
+        margin: 0 1em 0 3.5em;
+    }
+    .year-column {
+        width: 8vw;
+    }
+    .genre-column {
+        width: 10vw;
+    }
+    .format-column {
+        width: 9vw;
+    }
+    .disc-actions {
+        display: flex;
+        position: absolute;
+        left: 0;
+        overflow: initial;
+    }
+    .collector {
+        position: absolute;
+        font-size: 2em;
+        right: 0;
+    }
+    .modify-disc {
+        position: relative;
+        display: flex;
+        align-items: center;
+        &::before {
+            @include icon('\f303');
+        }
+        &:hover .label {
+            opacity: 1;
+            z-index: 50;
+        }
+    }
+    .show-disc {
+        cursor: pointer;
+        display: flex;
+        align-items: center;
+        position: relative;
+        margin-right: 1em;
+        &::before {
+            @include icon('\f51f');
+        }
+        &:hover .label {
+            opacity: 1;
+            z-index: 50;
+        }
+    }
+    .label {
+        z-index: -1;
+        position: absolute;
+        background-color: white;
+        color: black;
+        right: -4em;
+        font-size: .6em;
+        opacity: 0;
+        transition: opacity .8s;
+        padding: .2em;
+        border-radius: .2em;
+    }
+    .disc-full {
+        z-index: 99;
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background-color: black;
+        display: flex;
+        align-items: center;
+        justify-content: space-around;
+    }
+    .close-disc {
+        cursor: pointer;
+        position: absolute;
+        @include flexCenter;
+        top: 2em;
+        right: 2em;
+        color: white;
+        border: solid .2em;
+        border-radius: 50%;
+        width: 2em;
+        height: 2em;
+        font-weight: bold;
+    }
+    .cover {
+        width: 25em;
+        height: 25em;
+        position: relative;
+        transition: 500ms;
+        transform-style: preserve-3d;
+        &.flip {
+            transform: rotateY(180deg);
+        }
+    }
+    .cover-back,.cover-front {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        backface-visibility: hidden;
+    }
+    .cover-previous {
+        cursor: pointer;
+        &::before {
+            @include icon('\f053',5em);
+        }
+    }
+    .cover-next {
+        cursor: pointer;
+        &::before {
+            @include icon('\f054',5em);
+        }
+    }
+    .unclick {
+        opacity: 0;
+    }
+    .cover-front {
+        img {
+            @include imageFit;
+        }
+    }
+    .cover-back {
+        transform: rotateY(180deg);
+        border: solid .2em;
+        padding: 1em;
+        p {
+            font-size: 2em;
+            margin-bottom: .5em;
+        }
+    }
+    .footer-marge {
+        position: relative;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: .5em 0 .5em 1em;
+    }
+    .page-displayed {
+        display: flex;
+        align-items: center;
+        margin-right: 6vw;
+        p {
+            cursor: pointer;
+            margin: 0 .5vw;
+        }
+    }
+    .pages-container {
+        display: flex;
+        align-items: center;
+    }
+    #select-page {
+        margin: 0 1em 0 .5em;
+    }
+    .page-selected {
+        background-color: #fff;
+        color: black;
+        font-weight: bold;
+        width: 1.2em;
+        height: 1.2em;
+        border-radius: 50%;
+        @include flexCenter;
+    }
+    .hide {
+        display: none;
+    }
+    .dots {
+        cursor: default;
+    }
+    .arrow-up {
+        position: absolute;
+        right: 1vw;
+        height: 100%;
+        @include flexCenter;
+        &::before {
+            @include icon('\f139');
+        }
+    }
+}

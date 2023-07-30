@@ -1,0 +1,34 @@
+.dark .switch-button {
+    border-color: white;
+    &::before {
+        transform: translateX(1.3em);
+        background-color: #fff;
+    }
+}
+
+.back {
+    z-index: 99;
+    position: absolute;
+    width: 30px;
+    height: 30px;
+    top: .5em;
+    left: .5em;
+    &::before {
+        @include icon('\f3e5',2em);
+        @include tablette-version {
+            font-size: 6vw;
+        }
+    }
+    &.hide {
+        display: none;
+    }
+}
+
+button {
+    background-color: black;
+    color: #fff;
+    border: solid;
+    border-radius: 1em;
+    padding: .5em 1em;
+    font-size: 1em;
+}
