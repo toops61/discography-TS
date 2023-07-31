@@ -60,7 +60,7 @@ function App() {
         <Route path="/" element={<Home showAlert={showAlert}/>} />
         <Route path="/Connect" element={<Connect showAlert={showAlert}/>} />
         <Route path="/NewDisc" element={<NewDisc showAlert={showAlert}/>} />
-        <Route path="/Discography" element={<Discography showAlert={showAlert}/>} />
+        <Route path="/Discography" element={<Discography/>} />
         <Route path="/Wantlist" element={<Wantlist showAlert={showAlert}/>} />
       </Routes>
     </div>

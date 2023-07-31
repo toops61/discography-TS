@@ -7,6 +7,7 @@ import { RootState } from '../redux/store';
 import { discFields, queryResultFields, searchFieldsInterface } from '../utils/interfaces';
 import { getDatabaseDiscs } from '../utils/fetchFunctions';
 import { sortDiscs, transformToLowerString } from '../utils/utilsFuncs';
+import Discs from './Discs';
 
 export default function Discography() {
     const connected = useAppSelector((state:RootState) => state.generalParamsSlice.connected);
@@ -76,7 +77,9 @@ export default function Discography() {
         setFilterObject({...tempObject});
     }
 
-    
+    const idShownFunc = (index:number) => {
+        setIdShown(index);
+    }
 
     const changeFilterCategory = (category:string) => {
         const object = filterObject.sort_category === category ? {...filterObject,sort_up: !filterObject.sort_up} : {...filterObject,sort_up: true,sort_category:category};
@@ -148,7 +151,7 @@ export default function Discography() {
     }, [])
     
 
-    const Discs = pagesDisplayed.length ? pagesDisplayed[pageSelected-1].map((disc,index) => {
+    /* const Discs = pagesDisplayed.length ? pagesDisplayed[pageSelected-1].map((disc,index) => {
         return (
             <tr className={index%2 === 0 ? "light-row" : ''} key={uuidv4()}>
                 <td className="disc-actions">
@@ -181,8 +184,18 @@ export default function Discography() {
                 {disc.digipack ? <td className="collector" tabIndex={0}>*</td> : null}
             </tr>
         )
-    }) : null;
-  return (
+    }) : null; */
+  
+    const ThComp = ({category,children}:{category:string,children:string}) => {
+        return (
+            <th onClick={() => changeFilterCategory(category)} className={category+"-column"} tabIndex={0}>
+                <h3 tabIndex={0}>{children}</h3>
+                {filterObject.sort_category === category ? <div className={filterObject.sort_up ? "selected up" : "selected down"} tabIndex={0}></div> : null}
+            </th>
+        )
+    };
+  
+    return (
     <main className="disco-main">
         {idShown >= 0 ? <div className="disc-full">
             <div className="close-disc" onClick={() => setIdShown(-1)}>X</div>
@@ -234,30 +247,21 @@ export default function Discography() {
         <table className="discs-container">
             <thead>
                 <tr>
-                    <th onClick={() => changeFilterCategory('artist')} className="artist-column" tabIndex={0}>
-                        <h3 tabIndex={0}>Artiste</h3>
-                        {filterObject.sort_category === 'artist' ? <div className={filterObject.sort_up ? "selected up" : "selected down"} tabIndex={0}></div> : null}
-                    </th>
-                    <th onClick={() => changeFilterCategory('album')} className="album-column" tabIndex={0}>
-                        <h3 tabIndex={0}>Album</h3>
-                        {filterObject.sort_category === 'album' ? <div className={filterObject.sort_up ? "selected up" : "selected down"} tabIndex={0}></div> : null}
-                    </th>
-                    <th onClick={() => changeFilterCategory('year')} className="year-column" tabIndex={0}>
-                        <h3 tabIndex={0}>Année</h3>
-                        {filterObject.sort_category === 'year' ? <div className={filterObject.sort_up ? "selected up" : "selected down"} tabIndex={0}></div> : null}
-                    </th>
-                    <th onClick={() => changeFilterCategory('genre')} className="genre-column" tabIndex={0}>
-                        <h3 tabIndex={0}>Genre</h3>
-                        {filterObject.sort_category === 'genre' ? <div className={filterObject.sort_up ? "selected up" : "selected down"} tabIndex={0}></div> : null}
-                    </th>
-                    <th onClick={() => changeFilterCategory('format')} className="format-column" tabIndex={0}>
-                        <h3 tabIndex={0}>Format</h3>
-                        {filterObject.sort_category === 'format' ? <div className={filterObject.sort_up ? "selected up" : "selected down"} tabIndex={0}></div> : null}
-                    </th>
+                    <ThComp category={'artist'}>Artiste</ThComp>
+                    <ThComp category={'album'}>Album</ThComp>
+                    <ThComp category={'year'}>Année</ThComp>
+                    <ThComp category={'genre'}>Genre</ThComp>
+                    <ThComp category={'format'}>Format</ThComp>
                 </tr>
             </thead>
             <tbody ref={tbodyRef}>
-                {Discs}
+                {pagesDisplayed.length ? pagesDisplayed[pageSelected-1].map((disc,index) => <Discs
+                  key={uuidv4()} 
+                  disc={disc} 
+                  index={index} 
+                  filterObject={filterObject} 
+                  idShownFunc={idShownFunc} 
+                />) : <></>}
             </tbody>
         </table>
         <div className="footer-marge">

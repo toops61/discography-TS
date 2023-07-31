@@ -3,9 +3,9 @@ import { Link } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import { updateGeneralParams } from '../redux/generalParamsSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { useGetDiscs, useGetWantlist } from '../utils/utilsFuncs';
 import { alertProps, queryResultFields } from '../utils/interfaces';
 import { RootState } from '../redux/store';
+import { useGetDiscs, useGetWantlist } from '../utils/fetchFunctions';
 
 export default function Home(props:alertProps) {
     const connected = useAppSelector((state:RootState) => state.generalParamsSlice.connected);
