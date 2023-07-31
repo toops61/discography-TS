@@ -1,35 +1,70 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import { useEffect } from "react";
+import { Route, Routes } from "react-router-dom";
+import { updateGeneralParams } from "./redux/generalParamsSlice";
+import { changeBodySize } from "./utils/utilsFuncs";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import Home from "./components/Home";
+import Connect from "./components/Connect";
+import NewDisc from "./components/NewDisc";
+import Discography from "./components/Discography";
+import Wantlist from "./components/Wantlist";
 
 function App() {
-  const [count, setCount] = useState(0)
+  const generalParams = useAppSelector(state => state.generalParamsSlice);
+
+  const dispatch = useAppDispatch();
+
+  const showAlert = (message:string,type:string) => {
+    const alertType = type ? type : '';
+    dispatch(updateGeneralParams({alertMessage:message,alertVisible:true,alertType}));
+    setTimeout(() => {
+      dispatch(updateGeneralParams({alertVisible:false}));
+    }, 2000);
+  };
+
+  useEffect(() => {
+    window.addEventListener('resize', changeBodySize);
+    changeBodySize();
+  }, []);
+  
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div className="App">
+      {generalParams.isLoading ? <div className="loader">
+        <div className="loader__disc-container">
+          <div className="loader__disc-inside">
+            <div className="loader__disc"></div>
+          </div>
+          <div className="disc-shadow"></div>
+        </div>
+        <div className="loader__disc-container">
+          <div className="loader__disc-inside">
+            <div className="loader__disc"></div>
+          </div>
+          <div className="disc-shadow"></div>
+        </div>
+        <div className="loader__disc-container">
+          <div className="loader__disc-inside">
+            <div className="loader__disc"></div>
+          </div>
+          <div className="disc-shadow"></div>
+        </div>
+      </div> : <></>}
+      {generalParams.alertVisible ? <div className="alert-window">
+        <div className="alert-message-container">
+          <div className={generalParams.alertType}></div>
+          <p>{generalParams.alertMessage}</p>
+        </div>
+      </div> : <></>}
+      <Routes>
+        <Route path="/" element={<Home showAlert={showAlert}/>} />
+        <Route path="/Connect" element={<Connect showAlert={showAlert}/>} />
+        <Route path="/NewDisc" element={<NewDisc showAlert={showAlert}/>} />
+        <Route path="/Discography" element={<Discography showAlert={showAlert}/>} />
+        <Route path="/Wantlist" element={<Wantlist showAlert={showAlert}/>} />
+      </Routes>
+    </div>
+  );
 }
 
-export default App
+export default App;
