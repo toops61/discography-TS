@@ -14,10 +14,10 @@ body {
   //width: 100vw;
   height: 100vh;
   background-color: black;
-  background: url(../img/discs_960.webp) fixed no-repeat;
+  background: url(../assets/discs_960.webp) fixed no-repeat;
   background-size: cover;
   @media (orientation: portrait) {
-    background: url(../img/discot_portrait3.webp) fixed no-repeat;
+    background: url(../assets/discot_portrait3.webp) fixed no-repeat;
     background-size: cover;
   }
 }

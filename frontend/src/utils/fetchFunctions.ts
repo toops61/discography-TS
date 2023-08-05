@@ -1,9 +1,10 @@
 import { useQuery } from "react-query";
+import { wishDiscFields } from "./interfaces";
 
-export const getDatabaseDiscs = async querySelected => {
+export const getDatabaseDiscs = async (querySelected:string) => {
     const url = `https://eu-west-2.aws.data.mongodb-api.com/app/data-nkugr/endpoint/${querySelected === 'discs' ? 'displayDiscs' : 'displayWishes'}`;
 
-    let request = {
+    const request = {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
@@ -35,14 +36,14 @@ export const useGetDiscs = () => {
 
 export const useGetWantlist = () => {
     return useQuery(['wantlist'],
-        getDatabaseDiscs,
+        () => getDatabaseDiscs(''),
         {
             cacheTime: 7200000,
             staleTime: 7200000
     })
 }
 
-export const fetchDisc = async (endpoint,token,newDisc) => {
+export const fetchDisc = async (endpoint:string,token:string,newDisc:wishDiscFields) => {
     let method = '';
     if (endpoint === 'updateDisc' || endpoint === 'updateWish') {
         method = 'PUT';
@@ -50,9 +51,9 @@ export const fetchDisc = async (endpoint,token,newDisc) => {
         method = 'DELETE';
     } else {
         method = 'POST';
-    };
+    }
 
-    const updatedDisc = {...newDisc};
+    const updatedDisc : wishDiscFields = {...newDisc};
 
     if (endpoint.includes('Wish')) {
         delete updatedDisc.year;
@@ -62,7 +63,7 @@ export const fetchDisc = async (endpoint,token,newDisc) => {
 
     //API fetch requete POST pour formulaire
     const url = `http://localhost:8000/${endpoint}`;
-    let request = {
+    const request = {
         method,
         body: JSON.stringify(updatedDisc),
         headers: {

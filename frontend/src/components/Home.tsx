@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { useQueryClient } from 'react-query';
 import { updateGeneralParams } from '../redux/generalParamsSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { alertProps, queryResultFields } from '../utils/interfaces';
+import { alertProps, queryGetFields } from '../utils/interfaces';
 import { RootState } from '../redux/store';
 import { useGetDiscs, useGetWantlist } from '../utils/fetchFunctions';
 
@@ -14,7 +14,7 @@ export default function Home(props:alertProps) {
 
     const queryclient = useQueryClient();
 
-    const handleData = (result:queryResultFields,querySelected:string) => {
+    const handleData = (result:queryGetFields,querySelected:string) => {
         Array.isArray(result) && sessionStorage.setItem((querySelected === 'discs' ?'discStorage' : 'wantedStorage'),JSON.stringify(result));
         result?.message && props.showAlert(result.message,'error');
         return result;

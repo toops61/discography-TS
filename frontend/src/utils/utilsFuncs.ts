@@ -1,24 +1,26 @@
-import { discFields, searchFieldsInterface } from "./interfaces";
+import { NewClassDisc } from "./classes";
+import { discFields, queryResultFields, searchFieldsInterface, wishDiscFields } from "./interfaces";
 
 const bodyDom = document.querySelector('body') as HTMLBodyElement;
 
-export  const changeBodySize = () => {
+export const changeBodySize = () => {
     window.innerWidth < 900 ? bodyDom.style.height = window.innerHeight + 'px' : bodyDom.style.height = '';
 }
 
+export const stringReplaceall = (text:string) => {
+    let newText = text.replace(/ /gi,'%20');
+    newText = text.replace(/'/gi,'%27');
+    newText = text.replace(/&/gi,'%26');
+    return newText;
+}
+
 //find record year
-export const musicBrainzSearch = async artistObject => {
-    let artist = artistObject.artist;
-    artist.replaceAll(' ','%20');
-    artist.replaceAll("'",'%27');
-    artist.replaceAll('&','%26');
-    let album = artistObject.album;
-    album.replaceAll(' ','%20');
-    album.replaceAll("'",'%27');
-    album.replaceAll('&','%26');
+export const musicBrainzSearch = async (artistObject:wishDiscFields) => {
+    const artist = stringReplaceall(artistObject.artist);
+    const album = stringReplaceall(artistObject.album);
     try {
     const response = await fetch(
-        `https://musicbrainz.org/ws/2/release?query=%22${artistObject.album}%22%20AND%20%22${artistObject.artist}%22&limit=30&fmt=json`
+        `https://musicbrainz.org/ws/2/release?query=%22${album}%22%20AND%20%22${artist}%22&limit=30&fmt=json`
     );
     if (!response.ok) {
         throw new Error(`Erreur HTTP : ${response.status}`);
@@ -31,10 +33,11 @@ export const musicBrainzSearch = async artistObject => {
     }
 }
 
-const getDateFromQuery = json => {
+const getDateFromQuery = (json:{releases:{date:string}[]}) => {
     try {
         const resultArray = json.releases;
-        const datesArray = [];
+        
+        const datesArray : number[] = [];
         //get all releases years
         resultArray.map(release => {
             const firstRelease = release['date'] ? new Date(release['date']).getFullYear() : '';
@@ -46,11 +49,11 @@ const getDateFromQuery = json => {
     }
 }
 
-export const updateDiscs = (newData,array,deleteDisc) => {
+export const updateDiscs = (newData:queryResultFields,array:wishDiscFields[]|discFields[],deleteDisc:string) => {
     const previousArray = [...array];
-    const newDiscModified = newData.data;
+    const newDiscModified = (typeof newData.data !== 'string') ? newData.data : new NewClassDisc('','',1970,'Folk Rock','cd','',false);
     const oldDiscIndex = previousArray.findIndex(disc => deleteDisc ? (disc._id === newData.data) : (disc._id === newDiscModified._id && disc.format === newDiscModified.format));
-    oldDiscIndex === -1 ? previousArray.push(newData.data) : (deleteDisc ? previousArray.splice(oldDiscIndex,1) : previousArray.splice(oldDiscIndex,1,newDiscModified));
+    oldDiscIndex === -1 ? previousArray.push(newDiscModified) : (deleteDisc ? previousArray.splice(oldDiscIndex,1) : previousArray.splice(oldDiscIndex,1,newDiscModified));
     sessionStorage.setItem('discStorage',JSON.stringify(previousArray));
     return previousArray;
 }
@@ -130,7 +133,8 @@ export const sortDiscs = (array:discFields[],filterObject:searchFieldsInterface)
 }
 
 export const transformToLowerString : ((value:string|number|boolean|undefined) => string) = value => {
-    let lowString = value && Number.isInteger(value) ? value.toString() : '';
+    let lowString = value ? value.toString() : '';
+    
     lowString =  lowString?.toLowerCase();
     return lowString;
 }
