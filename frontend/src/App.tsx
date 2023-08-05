@@ -25,6 +25,10 @@ function App() {
   useEffect(() => {
     window.addEventListener('resize', changeBodySize);
     changeBodySize();
+
+    return () => {
+      window.removeEventListener('resize', changeBodySize);
+    }
   }, []);
   
 
