@@ -46,26 +46,6 @@
         border-radius: 1em;
         padding: 1em;
     }
-    .modify-icon {
-        position: absolute;
-        top: -0.5em;
-        left: -0.5em;
-        &::before {
-            @include icon('\f044',1.5em);
-        }
-    }
-    .delete-icon {
-        position: absolute;
-        top: -0.5em;
-        right: -0.5em;
-        background-color: #fff;
-        border-radius: 50%;
-        @include flexCenter;
-        &::before {
-            @include icon('\f057',1.5em);
-            color: rgb(175, 0, 0);
-        }
-    }
     .cover-container {
         width: 10em;
         height: 10em;

@@ -1,7 +1,10 @@
 import { ChangeEvent } from "react";
 import { filterFormProps } from "../utils/interfaces";
+import { useAppSelector } from "../redux/hooks";
 
-export default function DiscoFilterForm({filterObject,changeFilterObject,total}:filterFormProps) {
+export default function DiscoFilterForm({filterObject,changeFilterObject}:filterFormProps) {
+    const total = useAppSelector(state => state.displayedSlice.displayedDiscs.length);
+
     const handleChange : ((e:ChangeEvent) => void) = e => {
         const tempObject = {...filterObject};
         const target = e.target as HTMLInputElement;

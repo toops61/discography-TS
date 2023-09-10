@@ -1,20 +1,18 @@
 @import "./utils/variables";
-@import "./utils/functions";
 @import "./utils/mixins";
-@import "./utils/extensions";
 @import "./utils/keyframes";
 
 @import "./base/base";
 @import "./base/typography";
 
 @import "./components/buttons";
+@import "./components/alert-window";
+@import "./components/fullscreen";
 
-@import "./layout/container";
-@import "./layout/footer";
-@import "./layout/header";
 @import "./layout/loader";
 @import "./layout/nav";
 @import "./layout/form";
+@import "./layout/footer";
 
 @import "./pages/home";
 @import "./pages/form-page";

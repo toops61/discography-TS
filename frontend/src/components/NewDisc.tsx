@@ -23,7 +23,7 @@ export default function NewDisc(props:alertProps) {
     const queryclient = useQueryClient();
     const user = queryclient.getQueryData<connectedFields>('user');
     const previousArray = queryclient.getQueryData<discFields[]>('discs');
-    const previousWanted = queryclient.getQueryData<wishDiscFields[]>('wantlist');    
+    const previousWanted = queryclient.getQueryData<wishDiscFields[]>('wantlist');
 
     const handleChange = (e:ChangeEvent) => {
         const tempObject = {...newDisc};
@@ -31,7 +31,7 @@ export default function NewDisc(props:alertProps) {
         tempObject[target.name] = target.name !== 'digipack' ? target.value : target.checked;
         tempObject['format'] === 'vinyl' && (tempObject['digipack'] = false);
         setNewDisc(tempObject);
-    }
+    }    
 
     //fetch call to discogs API
     const getDiscogs = async () => {
@@ -77,7 +77,6 @@ export default function NewDisc(props:alertProps) {
     
     const { mutate:updateDiscMutation,isLoading:discLoading } = useMutation(
         () => {
-
             const updateDisc = previousArray ? previousArray.find(e => e._id === newDisc._id && e.format === newDisc.format) : null;
             const token = user?.token ? user.token : '';
             return fetchDisc(updateDisc ? 'updateDisc' : 'newDisc',token,newDisc);
@@ -111,7 +110,7 @@ export default function NewDisc(props:alertProps) {
 
     const { mutate:updateWantedMutation,isLoading:wantedLoading } = useMutation(
         () => {
-            const updateDisc = previousWanted?.find(e => e._id === newDisc._id && e.format === newDisc.format);
+            const updateDisc = previousWanted?.find(e => e._id === newDisc._id);
             const token = user?.token ? user.token : '';
             return fetchDisc(updateDisc ? 'updateWish' : 'newWish',token,newDisc);
         }, 

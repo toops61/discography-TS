@@ -30,10 +30,6 @@ export default function Home(props:alertProps) {
         queryclient.removeQueries('user');
     }
 
-    const checkUser = () => {
-
-    }
-
     useEffect(() => {
         discs && handleData(discs,'discs');
     }, [discs]);
@@ -45,11 +41,6 @@ export default function Home(props:alertProps) {
     useEffect(() => {
         dispatch(updateGeneralParams({isLoading:loadingDiscs || loadingWanted ? true : false}));
     }, [loadingDiscs,loadingWanted]);
-
-    useEffect(() => {
-      checkUser();
-    }, [])
-    
 
   return (
     <section className="menu-container">

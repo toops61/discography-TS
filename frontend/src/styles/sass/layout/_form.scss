@@ -1,0 +1,24 @@
+input {
+    color: black;
+}
+select {
+    color: black;
+    cursor: pointer;
+}
+.filter-nav {
+    display: flex;
+    font-size: 1.5em;
+    margin-top: .5em;
+    .filter-field {
+        margin-right: 1em;
+    }
+    label {
+        margin-right: .3em;
+    }
+    h2 {
+        font-size: 1em;
+    }
+    @include tablette-version {
+        margin-top: 3em;
+    }
+}

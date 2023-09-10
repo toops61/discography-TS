@@ -11,9 +11,8 @@ import { getDatabaseDiscs } from "../utils/fetchFunctions";
 
 export default function Wantlist(props:alertProps) {
     const connected = useAppSelector(state => state.generalParamsSlice.connected);
-    //const wantlistArray = useSelector(state => state.wishesArray);
-    const [wantlistArray, setWantlistArray] = useState<wishDiscFields[]>([]);
 
+    const [wantlistArray, setWantlistArray] = useState<wishDiscFields[]>([]);
     const [stylesArray, setStylesArray] = useState<string []>([]);
     const [categoryShown, setCategoryShown] = useState<wishDiscFields[]>([]);
 

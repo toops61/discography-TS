@@ -1,13 +1,14 @@
-.dark .switch-button {
-    border-color: white;
-    &::before {
-        transform: translateX(1.3em);
-        background-color: #fff;
-    }
+button {
+    background-color: black;
+    color: #fff;
+    border: solid;
+    border-radius: 1em;
+    padding: .5em 1em;
+    font-size: 1em;
 }
 
 .back {
-    z-index: 99;
+    z-index: 5;
     position: absolute;
     width: 30px;
     height: 30px;
@@ -23,12 +24,71 @@
         display: none;
     }
 }
-
-button {
-    background-color: black;
-    color: #fff;
-    border: solid;
-    border-radius: 1em;
-    padding: .5em 1em;
-    font-size: 1em;
+.arrow-up {
+    position: absolute;
+    right: 1vw;
+    height: 100%;
+    @include flexCenter;
+    &::before {
+        @include icon('\f139');
+    }
+}
+.modify-disc {
+    position: relative;
+    display: flex;
+    align-items: center;
+    &::before {
+        @include icon('\f303');
+    }
+    &:hover .label {
+        opacity: 1;
+        z-index: 50;
+    }
+}
+.show-disc {
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    position: relative;
+    margin-right: 1em;
+    &::before {
+        @include icon('\f51f');
+    }
+    &:hover .label {
+        opacity: 1;
+        z-index: 50;
+    }
+}
+.close-disc {
+    cursor: pointer;
+    position: absolute;
+    @include flexCenter;
+    top: 2em;
+    right: 2em;
+    color: white;
+    border: solid .2em;
+    border-radius: 50%;
+    width: 2em;
+    height: 2em;
+    font-weight: bold;
+}
+.modify-icon {
+    position: absolute;
+    top: -0.5em;
+    left: -0.5em;
+    &::before {
+        @include icon('\f044',1.5em);
+    }
+}
+.delete-icon {
+    position: absolute;
+    top: -0.5em;
+    right: -0.5em;
+    background-color: #fff;
+    border-radius: 50%;
+    @include flexCenter;
+    &::before {
+        @include icon('\f057',1.5em);
+        color: rgb(175, 0, 0);
+    }
 }

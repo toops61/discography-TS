@@ -1,22 +1,23 @@
 import { Link } from "react-router-dom";
 import { discFields, searchFieldsInterface } from "../utils/interfaces";
-import { useAppSelector } from "../redux/hooks";
-import { RootState } from "../redux/store";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { updateFullscreen } from "../redux/fullScreenSlice";
 
 interface discsProps {
     disc : discFields;
     index : number;
     filterObject:searchFieldsInterface;
-    idShownFunc: ((index:number) => void);
 }
 
-export default function Discs({disc,index,filterObject,idShownFunc}:discsProps) {
-    const connected = useAppSelector((state:RootState) => state.generalParamsSlice.connected);
+export default function Discs({disc,index,filterObject}:discsProps) {
+    const connected = useAppSelector(state => state.generalParamsSlice.connected);
+
+    const dispatch = useAppDispatch();
 
     return (
         <tr className={index%2 === 0 ? "light-row" : ''}>
             <td className="disc-actions">
-                <div className="show-disc" onClick={() => idShownFunc(index)} tabIndex={0}>
+                <div className="show-disc" onClick={() => dispatch(updateFullscreen({idShown:index,fullScreen:true}))} tabIndex={0}>
                     <p className="label">Details</p>
                 </div>
                 {connected ? <Link to="/NewDisc" className="modify-disc" onClick={() => {

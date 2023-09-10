@@ -1,9 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
-import { v4 as uuidv4 } from 'uuid';
-import { useAppSelector } from '../redux/hooks';
-import { RootState } from '../redux/store';
+import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { discFields, queryGetFields, searchFieldsInterface } from '../utils/interfaces';
 import { getDatabaseDiscs } from '../utils/fetchFunctions';
 import { sortDiscs, transformToLowerString } from '../utils/utilsFuncs';
@@ -11,13 +9,16 @@ import Discs from './Discs';
 import DiscographyFooter from './DiscographyFooter';
 import DiscoFilterForm from './DiscoFilterForm';
 import FullScreenDisc from './FullScreenDisc';
+import { updateDisplayed } from '../redux/displayedSlice';
 
 export default function Discography() {
-    const connected = useAppSelector((state:RootState) => state.generalParamsSlice.connected);
+    const connected = useAppSelector(state => state.generalParamsSlice.connected);
+    const fullScreen = useAppSelector(state => state.fullScreenSlice.fullScreen);
+    const displayedParams = useAppSelector(state => state.displayedSlice);
+
+    const dispatch = useAppDispatch();
 
     const [discsArray, setDiscsArray] = useState<discFields[]>([]);
-    //total discs displayed depending on filter and DB
-    const [displayedDiscs, setDisplayedDiscs] = useState<discFields[]>([]);
 
     const [filterObject, setFilterObject] = useState<searchFieldsInterface>(
         sessionStorage.searchFields ? 
@@ -29,10 +30,6 @@ export default function Discography() {
             filter_category: 'artist'
         }
     );
-    const [idShown, setIdShown] = useState<number>(-1);
-    const [maxPerPage, setMaxPerPage] = useState<number>(50);
-    const [pagesDisplayed, setPagesDisplayed] = useState<discFields[][]>([]);
-    const [pageSelected, setPageSelected] = useState<number>(1);
 
     const queryclient = useQueryClient();
 
@@ -71,10 +68,6 @@ export default function Discography() {
         return filteredArray;
     }
 
-    const idShownFunc = (index:number) => {
-        setIdShown(index);
-    }
-
     const changeFilterCategory = (category:string) => {
         const object = filterObject.sort_category === category ? {...filterObject,sort_up: !filterObject.sort_up} : {...filterObject,sort_up: true,sort_category:category};
         setFilterObject({...object});
@@ -88,14 +81,14 @@ export default function Discography() {
         for (let ind = 0; ind < total; ind++) {
             tempArray.push([]);
         }
-        displayedDiscs.map((disc,index) => {
-            index === pageIndex*maxPerPage && pageIndex++;
+        displayedParams.displayedDiscs.map((disc,index) => {
+            index === pageIndex*displayedParams.maxPerPage && pageIndex++;
             tempArray[pageIndex-1].push(disc);
         })
-        setPagesDisplayed([...tempArray]);
+        dispatch(updateDisplayed({pagesDisplayed:[...tempArray]}));
     }
 
-    const changePageSelected : ((page:number) => void) = page => setPageSelected(page);
+    //const changePageSelected : ((page:number) => void) = page => setPageSelected(page);
 
     useEffect(() => {
         if (discsArray.length) {
@@ -104,20 +97,20 @@ export default function Discography() {
             //then sort
             const sortedArray = sortDiscs(tempArray,filterObject);
             const displayed = filterObject.sort_up ? sortedArray : sortedArray.reverse();
-            setDisplayedDiscs(displayed);
+            dispatch(updateDisplayed({displayedDiscs:displayed}));
             delete sessionStorage.searchFields;
         }
     }, [filterObject,discsArray])
 
     useEffect(() => {
-        setPageSelected(1);
-      const totalPages = Math.ceil(displayedDiscs.length / maxPerPage);
-      fillPagesArrays(totalPages);
-    }, [displayedDiscs,maxPerPage])
+        dispatch(updateDisplayed({pageSelected:1}));
+        const totalPages = Math.ceil(displayedParams.displayedDiscs.length / displayedParams.maxPerPage);
+        fillPagesArrays(totalPages);
+    }, [displayedParams.displayedDiscs,displayedParams.maxPerPage])
     
     useEffect(() => {
       bodyScrollTop();
-    }, [pageSelected])
+    }, [displayedParams.pageSelected])
     
     useEffect(() => {
       getStoredDiscs();
@@ -134,24 +127,18 @@ export default function Discography() {
   
     return (
     <main className="disco-main">
-        {idShown >= 0 ? <FullScreenDisc
-            idShown={idShown}
-            idShownFunc={idShownFunc}
-            pagesDisplayed={pagesDisplayed}
-            pageSelected={pageSelected}
-        /> : <></>}
+        {fullScreen ? <FullScreenDisc /> : <></>}
         <Link className="back" to="/"></Link>
         <Link to={connected ? "/NewDisc" : "/Connect"} className="new-disc">New disc</Link>
         <DiscoFilterForm 
             filterObject={filterObject}
             changeFilterObject={changeFilterObject}
-            total={displayedDiscs.length}
         />
         <section className="title-container">
             <h1 tabIndex={0}>Discography</h1>
             <div className="max" tabIndex={0}>
                 <label htmlFor='filter_max'>Max affichés : </label>
-                <select name="filter_max" id="filter-max" onChange={e => setMaxPerPage(parseInt(e.target.value))} >
+                <select name="filter_max" id="filter-max" onChange={e => dispatch(updateDisplayed({maxPerPage:parseInt(e.target.value)}))} >
                     <option value="50">50</option>
                     <option value="100">100</option>
                     <option value="200">200</option>
@@ -169,20 +156,15 @@ export default function Discography() {
                 </tr>
             </thead>
             <tbody ref={tbodyRef}>
-                {pagesDisplayed.length ? pagesDisplayed[pageSelected-1].map((disc,index) => <Discs
-                  key={uuidv4()} 
+                {displayedParams.pagesDisplayed.length ? displayedParams.pagesDisplayed[displayedParams.pageSelected-1].map((disc,index) => <Discs
+                  key={disc._id} 
                   disc={disc} 
                   index={index} 
-                  filterObject={filterObject} 
-                  idShownFunc={idShownFunc} 
+                  filterObject={filterObject}
                 />) : <></>}
             </tbody>
         </table>
         <DiscographyFooter
-            pagesDisplayed={pagesDisplayed}
-            pageSelected={pageSelected}
-            displayedDiscs={displayedDiscs}
-            changePageSelected={changePageSelected}
             bodyScrollTop={bodyScrollTop}
         />
     </main>

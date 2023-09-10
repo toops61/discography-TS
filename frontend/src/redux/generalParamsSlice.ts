@@ -1,14 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
-interface ParamsState {
-    isLoading: boolean;
-    connected: boolean;
-    alertVisible: boolean;
-    alertMessage: string;
-    alertType: string;
-}
-
-const initialState: ParamsState = {
+const initialState = {
     isLoading: false,
     connected: false,
     alertVisible: false,
@@ -20,7 +12,7 @@ const generalParamsSlice = createSlice({
     name: "generalParams",
     initialState,
     reducers: {
-        updateGeneralParams: (state,action: PayloadAction<object>) => {
+        updateGeneralParams: (state,action: PayloadAction<{[key:string]:string|boolean}>) => {
             state = {...state,...action.payload};
             return state;
         }

@@ -37,7 +37,6 @@ export interface discogsQuery {
 
 export interface searchFieldsInterface {
     [key:string]:string|boolean;
-
     sort_up: boolean;
     sort_category: string;
     filter: string;
@@ -57,16 +56,11 @@ export interface alertProps {
 }
 
 export interface footerProps {
-    pagesDisplayed:discFields[][];
-    pageSelected:number;
-    displayedDiscs:discFields[];
-    changePageSelected:(page:number) => void;
     bodyScrollTop:()=>void;
 }
 export interface filterFormProps {
     filterObject:searchFieldsInterface;
     changeFilterObject:(obj:searchFieldsInterface)=>void;
-    total:number
 }
 export interface discShownProps {
     disc:wishDiscFields;
@@ -75,8 +69,5 @@ export interface discShownProps {
 }
 
 export interface fullScreenProps {
-    idShown:number;
-    idShownFunc:(id:number)=>void;
     pagesDisplayed:discFields[][];
-    pageSelected:number;
 }

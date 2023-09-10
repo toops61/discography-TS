@@ -50,13 +50,6 @@ a {
   text-decoration: none;
 }
 
-.dark {
-  background-color: black;
-  *,::before,::after {
-    color: #fff;
-  }
-}
-
 .previous-page {
   cursor: pointer;
   z-index: 50;
@@ -68,48 +61,5 @@ a {
   box-shadow: none;
   &::before {
       @include icon('\f137',2em);
-  }
-}
-
-.alert-window {
-  position: fixed;
-  left: 0;
-  top: 0;
-  @include flexColumn;
-  justify-content: center;
-  z-index: 10;
-  width: 100vw;
-  height: 100vh;
-  background-color: black;
-}
-
-.alert-message-container {
-  border: solid white;
-  border-radius: 2em;
-  width: 80%;
-  height: 60%;
-  @include flexColumn;
-  justify-content: center;
-  padding: 2em;
-  p {
-    font-size: 3em;
-  }
-  .valid {
-    &::before {
-      @include icon('\f00c',5em);
-      color: rgb(25, 173, 25);
-    }
-  }
-  .error {
-    &::before {
-      @include icon('\f00d',5em);
-      color: rgb(192, 14, 14);
-    }
-  }
-  .modify {
-    &::before {
-      @include icon('\f044',5em);
-      color: rgb(244, 135, 19);
-    }
   }
 }

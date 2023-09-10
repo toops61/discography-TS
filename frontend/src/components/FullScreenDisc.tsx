@@ -1,14 +1,21 @@
 import { useState } from "react";
-import { fullScreenProps } from "../utils/interfaces";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { updateFullscreen } from "../redux/fullScreenSlice";
 
-export default function FullScreenDisc({idShown,idShownFunc,pagesDisplayed,pageSelected}:fullScreenProps) {
-    const [coverFlip, setCoverFlip] = useState<boolean>(false);
+export default function FullScreenDisc() {
+    const [coverFlip, setCoverFlip] = useState(false);
+    
+    const idShown = useAppSelector(state => state.fullScreenSlice.idShown);
+    const pageSelected = useAppSelector(state => state.displayedSlice.pageSelected);
+    const pagesDisplayed = useAppSelector(state => state.displayedSlice.pagesDisplayed);
+
+    const dispatch = useAppDispatch();
 
   return (
     <div className="disc-full">
-        <div className="close-disc" onClick={() => idShownFunc(-1)}>X</div>
-        <div className={idShown > 0 ? "cover-previous" : "cover-previous unclick"} onClick={() => idShown > 0 && idShownFunc(idShown-1)}></div>
-        <div className={`cover${coverFlip && ' flip'}`} onClick={() => setCoverFlip(!coverFlip)}>
+        <div className="close-disc" onClick={() => dispatch(updateFullscreen({fullScreen:false}))}>X</div>
+        <div className={idShown > 0 ? "cover-previous" : "cover-previous unclick"} onClick={() => idShown > 0 && dispatch(updateFullscreen({idShown:idShown-1}))}></div>
+        <div className={`cover${coverFlip ? ' flip' : ''}`} onClick={() => setCoverFlip(!coverFlip)}>
             <div className="cover-front">
                 <img src={pagesDisplayed[pageSelected-1][idShown].cover} alt="cover" />
             </div>
@@ -20,7 +27,7 @@ export default function FullScreenDisc({idShown,idShownFunc,pagesDisplayed,pageS
                 <p>{pagesDisplayed[pageSelected-1][idShown].format}</p>
             </div>
         </div>
-        <div className={idShown < (pagesDisplayed[pageSelected-1].length-1) ? "cover-next" : "cover-next unclick"} onClick={() => idShown < (pagesDisplayed[pageSelected-1].length-1) && idShownFunc(idShown+1)}></div>
+        <div className={idShown < (pagesDisplayed[pageSelected-1].length-1) ? "cover-next" : "cover-next unclick"} onClick={() => idShown < (pagesDisplayed[pageSelected-1].length-1) && dispatch(updateFullscreen({idShown:idShown+1}))}></div>
     </div>
   )
 }

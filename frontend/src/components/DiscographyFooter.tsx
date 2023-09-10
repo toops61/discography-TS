@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 import { footerProps } from "../utils/interfaces";
 import { v4 as uuidv4 } from 'uuid';
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { updateDisplayed } from "../redux/displayedSlice";
 
-export default function DiscographyFooter({displayedDiscs,pagesDisplayed,pageSelected,changePageSelected,bodyScrollTop}:footerProps) {
+export default function DiscographyFooter({bodyScrollTop}:footerProps) {
     const [pageIdVisible, setPageIdVisible] = useState<number[]>([]);
+
+    const pageSelected = useAppSelector(state => state.displayedSlice.pageSelected);
+    const displayedDiscs = useAppSelector(state => state.displayedSlice.displayedDiscs);
+    const pagesDisplayed = useAppSelector(state => state.displayedSlice.pagesDisplayed);
+
+    const dispatch = useAppDispatch();
+
+    const changePageSelected = (page:number) => dispatch(updateDisplayed({pageSelected:page}));
 
     //set Id visibles in footer
     const fillPagesVisibles = () => {
@@ -29,12 +39,6 @@ export default function DiscographyFooter({displayedDiscs,pagesDisplayed,pageSel
             fillPagesVisibles();
         }
     }, [pagesDisplayed,pageSelected])
-
-    useEffect(() => {
-        if (displayedDiscs.length) {
-          fillPagesVisibles();
-        }
-      }, [pagesDisplayed,pageSelected])
 
     //condition for pages displayed
     const dotsCondition : ((index:number) => boolean) = index => {

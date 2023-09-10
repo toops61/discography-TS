@@ -50,11 +50,12 @@ const getDateFromQuery = (json:{releases:{date:string}[]}) => {
 }
 
 export const updateDiscs = (newData:queryResultFields,array:wishDiscFields[]|discFields[],deleteDisc:string) => {
+    const wanted = ((typeof newData.data !== 'string') && newData.data.wanted) ? true : false;
     const previousArray = [...array];
     const newDiscModified = (typeof newData.data !== 'string') ? newData.data : new NewClassDisc('','',1970,'Folk Rock','cd','',false);
     const oldDiscIndex = previousArray.findIndex(disc => deleteDisc ? (disc._id === newData.data) : (disc._id === newDiscModified._id && disc.format === newDiscModified.format));
     oldDiscIndex === -1 ? previousArray.push(newDiscModified) : (deleteDisc ? previousArray.splice(oldDiscIndex,1) : previousArray.splice(oldDiscIndex,1,newDiscModified));
-    sessionStorage.setItem('discStorage',JSON.stringify(previousArray));
+    sessionStorage.setItem((wanted ? 'wantedStorage' : 'discStorage'),JSON.stringify(previousArray));
     return previousArray;
 }
 
