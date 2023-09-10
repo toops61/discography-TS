@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { discFields, queryGetFields, searchFieldsInterface } from '../utils/interfaces';
 import { getDatabaseDiscs } from '../utils/fetchFunctions';
-import { sortDiscs, transformToLowerString } from '../utils/utilsFuncs';
+import { sortDiscs, transformString } from '../utils/utilsFuncs';
 import Discs from './Discs';
 import DiscographyFooter from './DiscographyFooter';
 import DiscoFilterForm from './DiscoFilterForm';
@@ -48,21 +48,25 @@ export default function Discography() {
         );
     }
 
-    const tbodyRef = useRef<HTMLTableSectionElement>(null);
+    const tableRef = useRef<HTMLTableSectionElement>(null);
 
-    const bodyScrollTop = () => {
-        const current = tbodyRef.current ? tbodyRef.current : null;
-        let scrollProperty = current ? current.scrollTop : null;
-        scrollProperty && (scrollProperty = 0);
+    const tableScrollTop = () => {
+        const current = tableRef.current ? tableRef.current : null;
+        const scrollProperty = current ? current.scrollTop : null;
+        scrollProperty && (current?.scrollTo({
+            top:0,
+            left:0,
+            behavior:'smooth'
+        }));
     }
 
     const filterDiscs = (array:discFields[]) => {
         const tempArray = array.map(disc => {return{...disc}});
         
         const filteredArray = tempArray.filter(disc => {
-            const searched = transformToLowerString(disc[filterObject.filter_category]);
+            const searched = transformString(disc[filterObject.filter_category]);
             let entered = filterObject.filter;
-            entered = entered.toLowerCase();
+            entered = transformString(entered);
             return searched.includes(entered);
         });
         return filteredArray;
@@ -109,7 +113,7 @@ export default function Discography() {
     }, [displayedParams.displayedDiscs,displayedParams.maxPerPage])
     
     useEffect(() => {
-      bodyScrollTop();
+      tableScrollTop();
     }, [displayedParams.pageSelected])
     
     useEffect(() => {
@@ -155,7 +159,7 @@ export default function Discography() {
                     <ThComp category={'format'}>Format</ThComp>
                 </tr>
             </thead>
-            <tbody ref={tbodyRef}>
+            <tbody ref={tableRef}>
                 {displayedParams.pagesDisplayed.length ? displayedParams.pagesDisplayed[displayedParams.pageSelected-1].map((disc,index) => <Discs
                   key={disc._id} 
                   disc={disc} 
@@ -165,7 +169,7 @@ export default function Discography() {
             </tbody>
         </table>
         <DiscographyFooter
-            bodyScrollTop={bodyScrollTop}
+            tableScrollTop={tableScrollTop}
         />
     </main>
   )

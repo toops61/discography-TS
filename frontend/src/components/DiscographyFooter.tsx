@@ -1,10 +1,9 @@
 import { useEffect, useState } from "react";
-import { footerProps } from "../utils/interfaces";
 import { v4 as uuidv4 } from 'uuid';
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { updateDisplayed } from "../redux/displayedSlice";
 
-export default function DiscographyFooter({bodyScrollTop}:footerProps) {
+export default function DiscographyFooter({tableScrollTop}:{tableScrollTop:()=>void}) {
     const [pageIdVisible, setPageIdVisible] = useState<number[]>([]);
 
     const pageSelected = useAppSelector(state => state.displayedSlice.pageSelected);
@@ -70,7 +69,7 @@ export default function DiscographyFooter({bodyScrollTop}:footerProps) {
             </div>
             <p onClick={() => pageSelected < pagesDisplayed.length && changePageSelected(pageSelected+1)} tabIndex={0}>suivant</p>
         </div> : null}
-        <div className="arrow-up" tabIndex={0} onClick={bodyScrollTop}></div>
+        <div className="arrow-up" tabIndex={0} onClick={tableScrollTop}></div>
     </footer>
   )
 }

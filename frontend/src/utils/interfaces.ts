@@ -54,10 +54,6 @@ export interface connectedFields {
 export interface alertProps {
     showAlert:(message:string,type:string) => void;
 }
-
-export interface footerProps {
-    bodyScrollTop:()=>void;
-}
 export interface filterFormProps {
     filterObject:searchFieldsInterface;
     changeFilterObject:(obj:searchFieldsInterface)=>void;
@@ -66,8 +62,4 @@ export interface discShownProps {
     disc:wishDiscFields;
     updateShown:(id:string) => void;
     showAlert:(message:string,type:string) => void;
-}
-
-export interface fullScreenProps {
-    pagesDisplayed:discFields[][];
 }

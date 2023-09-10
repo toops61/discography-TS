@@ -26,10 +26,10 @@ export default function Wantlist(props:alertProps) {
         setCategoryShown([...tempArray]);
     }
 
-    const bodyScrollTop = () => {
+    /* const bodyScrollTop = () => {
         mainRef?.current && console.log(mainRef.current);
         //mainRef.scrollTop = 0;
-    }
+    } */
 
     const getStoredWanted = () => {
         const discStorage = sessionStorage.wantedStorage ? JSON.parse(sessionStorage.getItem('wantedStorage') || '') : [];
@@ -103,7 +103,7 @@ export default function Wantlist(props:alertProps) {
             <Link to="/Discography" className="disco-link"><p>Discographie</p></Link>
             {connected ? <Link className="add-new" to="/NewDisc"><p>Ajouter disque</p></Link> : <></>}
         </section>
-        <div className="arrow-up" tabIndex={0} onClick={bodyScrollTop}></div>
+        {/* <div className="arrow-up" tabIndex={0} onClick={bodyScrollTop}></div> */}
     </main>
   )
 }
