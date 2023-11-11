@@ -1,5 +1,5 @@
 import { NewClassDisc } from "./classes";
-import { discFields, queryResultFields, searchFieldsInterface, wishDiscFields } from "./interfaces";
+import { discFields, searchFieldsInterface, wishDiscFields } from "./interfaces";
 
 const bodyDom = document.querySelector('body') as HTMLBodyElement;
 
@@ -49,12 +49,16 @@ const getDateFromQuery = (json:{releases:{date:string}[]}) => {
     }
 }
 
-export const updateDiscs = (newData:queryResultFields,array:wishDiscFields[]|discFields[],deleteDisc:string) => {
-    const wanted = ((typeof newData.data !== 'string') && newData.data.wanted) ? true : false;
+export const updateDiscs = (newData:discFields|wishDiscFields|string,array:wishDiscFields[]|discFields[],deleteDisc:string) => {
+    const wanted = ('format' in array[0]) ? false : true;
+
     const previousArray = [...array];
-    const newDiscModified = (typeof newData.data !== 'string') ? newData.data : new NewClassDisc('','',1970,'Folk Rock','cd','',false);
-    const oldDiscIndex = previousArray.findIndex(disc => deleteDisc ? (disc._id === newData.data) : (disc._id === newDiscModified._id && disc.format === newDiscModified.format));
+    const newDiscModified = (typeof newData !== 'string') ? newData : new NewClassDisc('','',1970,'Folk Rock','cd','',false);
+
+    const oldDiscIndex = previousArray.findIndex(disc => deleteDisc ? (disc._id === newData) : (disc._id === newDiscModified._id && disc.format === newDiscModified.format));
+
     oldDiscIndex === -1 ? previousArray.push(newDiscModified) : (deleteDisc ? previousArray.splice(oldDiscIndex,1) : previousArray.splice(oldDiscIndex,1,newDiscModified));
+
     sessionStorage.setItem((wanted ? 'wantedStorage' : 'discStorage'),JSON.stringify(previousArray));
     return previousArray;
 }

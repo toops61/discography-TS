@@ -74,10 +74,11 @@ export const fetchDisc = async (endpoint:string,token:string,newDisc:wishDiscFie
     try {
         const response = await fetch(url, request);
         if (!response.ok) {
-            throw new Error(`Erreur HTTP : ${response.status}`)
+            const json : {message:string;} = await response.json();
+            throw new Error(`Erreur HTTP : ${response.status}${json?.message ? (', ' + json.message) : ''}`)
         }
         const json = await response.json();
-        //props.showAlert(json.message,'valid');
+        
         return json;
     } catch (error) {
         return error;

@@ -7,7 +7,7 @@ import { alertProps, queryGetFields } from '../utils/interfaces';
 import { RootState } from '../redux/store';
 import { useGetDiscs, useGetWantlist } from '../utils/fetchFunctions';
 
-export default function Home(props:alertProps) {
+export default function Home({showAlert}:{showAlert:alertProps}) {
     const connected = useAppSelector((state:RootState) => state.generalParamsSlice.connected);
 
     const dispatch = useAppDispatch();
@@ -16,7 +16,7 @@ export default function Home(props:alertProps) {
 
     const handleData = (result:queryGetFields,querySelected:string) => {
         Array.isArray(result) && sessionStorage.setItem((querySelected === 'discs' ?'discStorage' : 'wantedStorage'),JSON.stringify(result));
-        result?.message && props.showAlert(result.message,'error');
+        result?.message && showAlert(result.message,'error');
         return result;
     }
     

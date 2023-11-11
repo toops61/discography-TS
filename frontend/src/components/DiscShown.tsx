@@ -23,7 +23,7 @@ export default function DiscShown({disc,updateShown,showAlert}:discShownProps) {
             }, 
             {
                 onSuccess: data => {
-                    data.data === disc._id && queryclient.setQueryData('wantlist',() => updateDiscs(data,previousWanted,'delete'));
+                    data.data === disc._id && queryclient.setQueryData('wantlist',() => updateDiscs(data.data,previousWanted,'delete'));
                     updateShown(data.data);
                     showAlert(data.message,data.data === disc._id ? 'valid' : 'error');
                 }

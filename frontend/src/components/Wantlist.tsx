@@ -9,7 +9,7 @@ import { useAppSelector } from "../redux/hooks";
 import DiscShown from "./DiscShown";
 import { getDatabaseDiscs } from "../utils/fetchFunctions";
 
-export default function Wantlist(props:alertProps) {
+export default function Wantlist({showAlert}:{showAlert:alertProps}) {
     const connected = useAppSelector(state => state.generalParamsSlice.connected);
 
     const [wantlistArray, setWantlistArray] = useState<wishDiscFields[]>([]);
@@ -84,7 +84,7 @@ export default function Wantlist(props:alertProps) {
   return (
     <main className="wantlist-main" ref={mainRef}>
         <Link className="back" to="/"></Link>
-        <h1>Wantlist</h1>
+        <h1>{categoryShown.length ? categoryShown[0].genre : 'Wantlist'}</h1>
         {categoryShown.length ? 
         <section className="shown-discs">
             <button className="close-window" onClick={() => setCategoryShown([])}></button>
@@ -92,7 +92,7 @@ export default function Wantlist(props:alertProps) {
             return <DiscShown 
                 disc={disc} 
                 updateShown={updateShown}
-                showAlert={props.showAlert} 
+                showAlert={showAlert} 
                 key={uuidv4()} />
             })}
         </section> : 

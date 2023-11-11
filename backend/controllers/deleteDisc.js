@@ -7,13 +7,13 @@ exports.deleteDisc = (req, res) => {
         .then(disc => {
             Disc.deleteOne({ _id: id })
             .then(() => {
-                const message = `Le disque a bien été supprimé`;
+                const message = `Le disque ${disc.album} a bien été supprimé`;
                 res.status(200).json({ message,data:id });
             })
-            .catch(error => res.status(400).json({ error }));
+            .catch(() => res.status(400).json({ message: 'Le disque n\'existe pas ddans la base de données, vous ne pouvez le supprimer' }));
         })
-        .catch(error => {
-            const message = 'Le disque n\'a pas pu être récupéré :-( Réessayez dans quelques instants.';
-            res.status(500).json({ message, data: error });
+        .catch(() => {
+            const message = 'Le disque n\'a pas pu être récupéré, réessayez';
+            res.status(500).json({ message });
         });        
 }

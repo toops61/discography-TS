@@ -17,15 +17,23 @@ export interface queryGetFields {
     message:string;
     token?:string;
 }
-export interface queryResultFields {
-    data:wishDiscFields|string;
-    message:string;
-    token?:string;
-}
 
-export interface objectResultFields {
-    data:discFields;
+export interface queryResultType {
     message:string;
+    data?:discFields|wishDiscFields|string;
+}
+/* export interface backendResultDisc {
+    message:string;
+    data?:discFields;
+}
+export interface backendResultWanted {
+    message:string;
+    data?:wishDiscFields;
+} */
+export interface backendResultUser {
+    message:string;
+    data?:userFields;
+    token?:string;
 }
 
 export interface discogsQuery {
@@ -51,9 +59,7 @@ export interface connectedFields {
     email: string;
     token: string;
 }
-export interface alertProps {
-    showAlert:(message:string,type:string) => void;
-}
+export type alertProps = (message:string,type:string) => void;
 export interface filterFormProps {
     filterObject:searchFieldsInterface;
     changeFilterObject:(obj:searchFieldsInterface)=>void;

@@ -29,6 +29,6 @@ exports.connectUser = (req, res) => {
         })
         .catch(error => {
             const message = `L'utilisateur n'a pas pu être connecté.`;
-            return res.status(500).json({ message, data: error })
+            return res.status(500).json({ message })
         })
 }

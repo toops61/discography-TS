@@ -13,8 +13,8 @@ exports.createDisc = (req, res) => {
                 data: disc
             })
         })
-        .catch(error => {
+        .catch(() => {
             const message = 'Le disque n\'a pas pu être créé, réessayez dans un instant...'
-            res.status(500).json({ message, data: error })
+            res.status(500).json({ message })
         })
 }

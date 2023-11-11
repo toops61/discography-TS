@@ -2,10 +2,10 @@ import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useQuery } from "react-query";
 import { useAppDispatch } from "../redux/hooks";
-import { alertProps, connectedFields, userFields } from "../utils/interfaces";
+import { alertProps, backendResultUser, connectedFields, userFields } from "../utils/interfaces";
 import { updateGeneralParams } from "../redux/generalParamsSlice";
 
-export default function CreateUser(props:alertProps) {
+export default function CreateUser({showAlert}:{showAlert:alertProps}) {
     const [userObject, setUserObject] = useState<userFields>({
         email:'',
         password:''
@@ -35,19 +35,23 @@ export default function CreateUser(props:alertProps) {
             if (!response.ok) {
                 throw new Error(`Erreur HTTP : ${response.status}`)
             }
-            const json = await response.json();
-            const userLogged:connectedFields = {
-                id: json.data._id,
-                email: json.data.email,
-                token: json.token
+            const json : backendResultUser = await response.json();
+            if (json.data && json.token) {
+                const userLogged:connectedFields = {
+                    id: json.data._id,
+                    email: json.data.email,
+                    token: json.token
+                }
+                dispatch(updateGeneralParams({connected:true}));
+                showAlert(json.message,'valid');
+                return userLogged;
+            } else {
+                showAlert('la connexion a échoué, réessayez','alert');
             }
-            dispatch(updateGeneralParams({connected:true}));
-            props.showAlert(json.message,'valid');
-            return userLogged;
         } catch (error) {
             console.log(error);
             const message = error instanceof Error ? error.message : '';
-            props.showAlert(message,'alert');
+            showAlert(message,'alert');
         }
     };
   

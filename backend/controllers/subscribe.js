@@ -13,7 +13,9 @@ exports.createUser = (req, res) => {
             .then(user => {
                 const message = `Votre profil est créé, ${profil.email}. Bienvenue !`
                 res.json({
-                    message, data: user, token: jwt.sign(
+                    message, 
+                    data: user, 
+                    token: jwt.sign(
                         { userId: user.id },
                         process.env.TOKEN_SECRET,
                         { expiresIn: '4h' }

@@ -8,7 +8,7 @@ import { fetchDisc } from "../utils/fetchFunctions";
 import { musicBrainzSearch, updateDiscs } from "../utils/utilsFuncs";
 import { NewClassDisc } from "../utils/classes";
 
-export default function NewDisc(props:alertProps) {
+export default function NewDisc({showAlert}:{showAlert:alertProps}) {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -47,7 +47,7 @@ export default function NewDisc(props:alertProps) {
             setIdDiscogs('');
         } catch (error) {
             console.error(error);
-            props.showAlert('Appel discogs échoué','error');
+            showAlert('Appel discogs échoué','error');
         }
     }
 
@@ -80,27 +80,33 @@ export default function NewDisc(props:alertProps) {
             const updateDisc = previousArray ? previousArray.find(e => e._id === newDisc._id && e.format === newDisc.format) : null;
             const token = user?.token ? user.token : '';
             return fetchDisc(updateDisc ? 'updateDisc' : 'newDisc',token,newDisc);
-        }, 
+        },
         {
             onSuccess: data => {
-                const previous = previousArray ? previousArray : [];
-                data.data && queryclient.setQueryData('discs',() => updateDiscs(data,previous,''));
-                props.showAlert(data.message,data.data ? 'valid' : 'error');
-                setNewDisc({...data.data});
+                const previous = previousArray || [];
+                data.data && queryclient.setQueryData('discs',() => updateDiscs(data.data,previous,''));
+                showAlert(data.message,data.data ? 'valid' : 'error');
+                data.data && setNewDisc({...data.data});
+                if (!data.data && data.message.includes('401')) {
+                    delete sessionStorage.userStored;
+                    dispatch(updateGeneralParams({connected:false}));
+                    queryclient.removeQueries('user');
+                    navigate("/Connect");
+                }
             }
         }
     );
 
     const { mutate:deleteDiscMutation,isLoading:deleteLoading } = useMutation(
         () => {
-            const token = user?.token ? user.token : '';
+            const token = user?.token || '';
             return fetchDisc('deleteDisc',token,newDisc);
         }, 
         {
             onSuccess: data => {
-                const previous = previousArray ? previousArray : [];
-                data.data === newDisc._id && queryclient.setQueryData('discs',() => updateDiscs(data,previous,'delete'));
-                props.showAlert(data.message,data.data === newDisc._id ? 'valid' : 'error');
+                const previous = previousArray || [];
+                data.data === newDisc._id && queryclient.setQueryData('discs',() => updateDiscs(data.data,previous,'delete'));
+                showAlert(data.message,data.data === newDisc._id ? 'valid' : 'error');
                 data.data && setTimeout(() => {
                     navigate("/Discography");
                 }, 1500);
@@ -111,14 +117,14 @@ export default function NewDisc(props:alertProps) {
     const { mutate:updateWantedMutation,isLoading:wantedLoading } = useMutation(
         () => {
             const updateDisc = previousWanted?.find(e => e._id === newDisc._id);
-            const token = user?.token ? user.token : '';
+            const token = user?.token || '';
             return fetchDisc(updateDisc ? 'updateWish' : 'newWish',token,newDisc);
         }, 
         {
             onSuccess: data => {
-                const previous = previousWanted ? previousWanted : [];
-                data.data && queryclient.setQueryData('wantlist',() => updateDiscs(data,previous,''));
-                props.showAlert(data.message,data.data ? 'valid' : 'error');
+                const previous = previousWanted || [];
+                data.data && queryclient.setQueryData('wantlist',() => updateDiscs(data.data,previous,''));
+                showAlert(data.message,data.data ? 'valid' : 'error');
                 data.data && setTimeout(() => {
                     navigate("/Wantlist");
                 }, 1500);
@@ -133,12 +139,12 @@ export default function NewDisc(props:alertProps) {
 
     const submitWanted = (e:FormEvent) => {
         e.preventDefault();
-        (newDisc.artist && newDisc.album) ? updateWantedMutation() : props.showAlert('Remplir les champs','error');
+        (newDisc.artist && newDisc.album) ? updateWantedMutation() : showAlert('Remplir les champs','error');
     }
 
     const handleSubmit = (e:FormEvent) => {
         e.preventDefault();
-        (newDisc.artist && newDisc.album) ? updateDiscMutation() : props.showAlert('Remplir les champs','error');
+        (newDisc.artist && newDisc.album) ? updateDiscMutation() : showAlert('Remplir les champs','error');
     }
 
     useEffect(() => {
