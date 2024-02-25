@@ -1,16 +1,14 @@
-const express = require('express');
-const router = express.Router();
+import {Router} from 'express';
+const router = Router();
 
-const auth = require('../auth/auth');
+import auth from '../auth/auth.js';
 
-const createDisc = require('../controllers/createDisc');
-const updateDisc = require('../controllers/updateDisc');
-const deleteDisc = require('../controllers/deleteDisc');
-//const displayDiscs = require('../controllers/displayDiscs');
+import createDisc from '../controllers/createDisc.js';
+import updateDisc from '../controllers/updateDisc.js';
+import deleteDisc from '../controllers/deleteDisc.js';
 
-//router.get('/discography', displayDiscs.displayDiscs);
-router.post('/newDisc', auth, createDisc.createDisc);
-router.put('/updateDisc', auth, updateDisc.updateDisc);
-router.delete('/deleteDisc', auth, deleteDisc.deleteDisc);
+router.post('/newDisc', auth, createDisc);
+router.put('/updateDisc', auth, updateDisc);
+router.delete('/deleteDisc', auth, deleteDisc);
 
-module.exports = router;
+export default router;

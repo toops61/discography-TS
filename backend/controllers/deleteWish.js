@@ -1,11 +1,11 @@
-const Wish = require('../models/wishModel');
+import WishModel from '../models/wishModel.js';
 
-exports.deleteWish = (req, res) => {
+export default function deleteWish(req, res) {
     const discObject = req.body;
     const id = discObject._id;
-    Wish.findOne({ _id: id})
+    WishModel.findOne({ _id: id})
         .then(_disc => {
-            Wish.deleteOne({ _id: id })
+            WishModel.deleteOne({ _id: id })
             .then(() => {
                 const message = `Le disque a bien été supprimé`
                 res.status(200).json({ message, data:id })

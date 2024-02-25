@@ -1,10 +1,12 @@
-const mongoose = require('mongoose');
+import {Schema,model} from 'mongoose';
 
-const wishSchema = mongoose.Schema({
+const wishSchema = Schema({
   artist: { type: String, required: true },
   album: { type: String, required: true },
   genre: { type: String, required: true },
   cover: { type: String, required: false }
 });
 
-module.exports = mongoose.model('Wish', wishSchema);
+const WishModel = model('Wish', wishSchema);
+
+export default WishModel;

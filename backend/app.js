@@ -1,20 +1,18 @@
-const express = require('express');
-const app = express();
-const mongoose = require('mongoose');
-const dotenv = require('dotenv');
-const path = require('path');
+import express from 'express';
+import {connect} from 'mongoose';
+import {config} from 'dotenv';
+config();
+//const path = require('path');
 
-const discsRoutes = require('./routes/discsRoutes');
-const wishesRoutes = require('./routes/wishesRoutes');
-const userRoutes = require('./routes/userRoutes');
+const app = express();
+
+import discsRoutes from './routes/discsRoutes.js';
+import wishesRoutes from './routes/wishesRoutes.js';
+import userRoutes from './routes/userRoutes.js';
 
 const uri = process.env.URI;
 
-dotenv.config();
-
-mongoose.connect(uri,
-    { useNewUrlParser: true,
-      useUnifiedTopology: true })
+connect(uri)
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(error => console.log('Connexion à MongoDB échouée !',error));
 
@@ -33,4 +31,4 @@ app.use('/', discsRoutes);
 app.use('/', wishesRoutes);
 app.use('/', userRoutes);
 
-module.exports = app;
+export default app;

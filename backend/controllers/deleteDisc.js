@@ -1,11 +1,11 @@
-const Disc = require('../models/discModel');
+import DiscModel from '../models/discModel.js';
 
-exports.deleteDisc = (req, res) => {
+export default function deleteDisc(req, res) {
     const discObject = req.body;
     const id = discObject._id;
-    Disc.findOne({ _id: id})
+    DiscModel.findOne({ _id: id})
         .then(disc => {
-            Disc.deleteOne({ _id: id })
+            DiscModel.deleteOne({ _id: id })
             .then(() => {
                 const message = `Le disque ${disc.album} a bien été supprimé`;
                 res.status(200).json({ message,data:id });

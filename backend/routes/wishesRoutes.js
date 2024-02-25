@@ -1,14 +1,14 @@
-const express = require('express');
-const router = express.Router();
+import {Router} from 'express';
+const router = Router();
 
-const auth = require('../auth/auth');
+import auth from '../auth/auth.js';
 
-const createWish = require('../controllers/createWish');
-const updateWish = require('../controllers/updateWish');
-const deleteWish = require('../controllers/deleteWish');
+import createWish from '../controllers/createWish.js';
+import updateWish from '../controllers/updateWish.js';
+import deleteWish from '../controllers/deleteWish.js';
 
-router.post('/newWish', auth, createWish.createWish);
-router.put('/updateWish', auth, updateWish.updateWish);
-router.delete('/deleteWish', auth, deleteWish.deleteWish);
+router.post('/newWish', auth, createWish);
+router.put('/updateWish', auth, updateWish);
+router.delete('/deleteWish', auth, deleteWish);
 
-module.exports = router;
+export default router;

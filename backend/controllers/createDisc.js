@@ -1,11 +1,9 @@
-const Disc = require('../models/discModel');
+import DiscModel from '../models/discModel.js';
 
-require('dotenv').config();
-
-exports.createDisc = (req, res) => {
+export default function createDisc(req, res) {
     const disc = req.body;
     delete disc._id;
-    Disc.create({...disc})
+    DiscModel.create({...disc})
         .then(disc => {
             const message = `Le disque est créé`
             res.json({

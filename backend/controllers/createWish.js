@@ -1,11 +1,9 @@
-const Wish = require('../models/wishModel');
+import WishModel from '../models/wishModel.js';
 
-require('dotenv').config();
-
-exports.createWish = (req, res) => {
+export default function createWish(req, res) {
     const disc = req.body;
     delete disc._id;
-    Wish.create({...disc})
+    WishModel.create({...disc})
         .then(disc => {
             const message = `Le disque est créé`;
             res.json({

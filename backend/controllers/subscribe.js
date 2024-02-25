@@ -1,15 +1,13 @@
-const User = require('../models/userModel');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
+import UserModel from '../models/userModel.js';
+import {hash} from 'bcrypt';
+import jwt from 'jsonwebtoken';
 
-require('dotenv').config();
-
-exports.createUser = (req, res) => {
+export default function createUser(req, res) {
     const utilisateur = req.body;
-    bcrypt.hash(utilisateur.password, 10, (err, hash) => {
+    hash(utilisateur.password, 10, (err, hash) => {
         utilisateur.password = hash;
         const profil = {...utilisateur};
-        User.create(profil)
+        UserModel.create(profil)
             .then(user => {
                 const message = `Votre profil est créé, ${profil.email}. Bienvenue !`
                 res.json({

@@ -1,6 +1,6 @@
-const mongoose = require('mongoose');
+import {Schema,model} from 'mongoose';
 
-const discSchema = mongoose.Schema({
+const discSchema = Schema({
   artist: { type: String, required: true },
   album: { type: String, required: true },
   year: { type: Number, required: false },
@@ -10,4 +10,6 @@ const discSchema = mongoose.Schema({
   digipack: { type: Boolean, required: true}
 });
 
-module.exports = mongoose.model('Disc', discSchema);
+const DiscModel = model('Disc', discSchema);
+
+export default DiscModel;
