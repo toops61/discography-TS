@@ -1,6 +1,7 @@
+import { Request, Response } from 'express';
 import DiscModel from '../models/discModel.js';
 
-export default function createDisc(req, res) {
+export default function createDisc(req:Request, res:Response) {
     const disc = req.body;
     delete disc._id;
     DiscModel.create({...disc})

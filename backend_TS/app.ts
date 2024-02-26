@@ -6,9 +6,9 @@ config();
 
 const app: Express = express();
 
-//import discsRoutes from './routes/discsRoutes.js';
-//import wishesRoutes from './routes/wishesRoutes.js';
 import userRoutes from './routes/userRoutes';
+import discsRoutes from './routes/discsRoutes';
+//import wishesRoutes from './routes/wishesRoutes';
 
 const uri = process.env.URI || '';
 
@@ -27,8 +27,8 @@ app.use(express.json());
 
 //app.use('/images', express.static(path.join(__dirname, 'images')));
 
-//app.use('/', discsRoutes);
-//app.use('/', wishesRoutes);
 app.use('/', userRoutes);
+app.use('/', discsRoutes);
+//app.use('/', wishesRoutes);
 
 export default app;

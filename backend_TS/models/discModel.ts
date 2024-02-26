@@ -1,6 +1,6 @@
 import {Schema,model} from 'mongoose';
 
-const discSchema = Schema({
+const discSchema = new Schema({
   artist: { type: String, required: true },
   album: { type: String, required: true },
   year: { type: Number, required: false },
