@@ -1,6 +1,7 @@
+import { Request, Response } from 'express';
 import WishModel from '../models/wishModel.js';
 
-export default function createWish(req, res) {
+export default function createWish(req:Request, res:Response) {
     const disc = req.body;
     delete disc._id;
     WishModel.create({...disc})

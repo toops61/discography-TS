@@ -1,6 +1,7 @@
+import { Request, Response } from 'express';
 import WishModel from '../models/wishModel.js';
 
-export default function updateWish(req, res) {
+export default function updateWish(req:Request, res:Response) {
     const discObject = req.body;
     const id = discObject._id;
     WishModel.updateOne({ _id: id }, discObject)
