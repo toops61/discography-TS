@@ -1,16 +1,11 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const discModel_js_1 = __importDefault(require("../models/discModel.js"));
-function deleteDisc(req, res) {
+import DiscModel from '../models/discModel.js';
+export default function deleteDisc(req, res) {
     const discObject = req.body;
     const id = discObject._id;
-    discModel_js_1.default.findOne({ _id: id })
+    DiscModel.findOne({ _id: id })
         .then(disc => {
         const albumName = (disc === null || disc === void 0 ? void 0 : disc.album) || '';
-        discModel_js_1.default.deleteOne({ _id: id })
+        DiscModel.deleteOne({ _id: id })
             .then(() => {
             const message = `Le disque ${albumName} a bien été supprimé`;
             res.status(200).json({ message, data: id });
@@ -22,4 +17,3 @@ function deleteDisc(req, res) {
         res.status(500).json({ message });
     });
 }
-exports.default = deleteDisc;

@@ -2,12 +2,13 @@
   "name": "backend",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "dist/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npx tsc",
-    "start": "node dist/server.js",
-    "dev": "nodemon server.ts"
+    "start": "node --max_old_space_size=8192 --loader ts-node/esm server.ts",
+    "dev": "nodemon server"
   },
   "author": "Toops61",
   "license": "ISC",

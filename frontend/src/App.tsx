@@ -15,7 +15,7 @@ function App() {
   const dispatch = useAppDispatch();
 
   const showAlert = (message:string,type:string) => {
-    const alertType = type ? type : '';
+    const alertType = type || '';
     dispatch(updateGeneralParams({alertMessage:message,alertVisible:true,alertType}));
     setTimeout(() => {
       dispatch(updateGeneralParams({alertVisible:false}));

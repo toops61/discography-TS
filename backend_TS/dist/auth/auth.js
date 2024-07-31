@@ -1,9 +1,4 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+import jwt from 'jsonwebtoken';
 const auth = (req, res, next) => {
     const authorizationHeader = req.headers.authorization;
     if (!authorizationHeader || (authorizationHeader === 'Bearer')) {
@@ -16,7 +11,7 @@ const auth = (req, res, next) => {
         return res.status(401).json({ message });
     }
     const importedToken = process.env.TOKEN_SECRET || '';
-    jsonwebtoken_1.default.verify(token, importedToken, (error, decodedToken) => {
+    jwt.verify(token, importedToken, (error, decodedToken) => {
         if (error) {
             const message = `vous n'êtes pas autorisé à accèder à cette ressource`;
             return res.status(401).json({ message });
@@ -31,4 +26,4 @@ const auth = (req, res, next) => {
         }
     });
 };
-exports.default = auth;
+export default auth;

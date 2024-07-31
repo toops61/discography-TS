@@ -1,10 +1,5 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const http_1 = require("http");
-const app_1 = __importDefault(require("./app"));
+import { createServer } from 'http';
+import app from './app.js';
 const normalizePort = (val) => {
     const port = parseInt(val, 10);
     if (isNaN(port)) {
@@ -16,7 +11,7 @@ const normalizePort = (val) => {
     return false;
 };
 const port = normalizePort(process.env.PORT || '4200');
-app_1.default.set('port', port);
+app.set('port', port);
 const errorHandler = (error) => {
     if (error.syscall !== 'listen') {
         throw error;
@@ -36,7 +31,7 @@ const errorHandler = (error) => {
             throw error;
     }
 };
-const server = (0, http_1.createServer)(app_1.default);
+const server = createServer(app);
 server.on('error', errorHandler);
 server.on('listening', () => {
     const address = server.address();

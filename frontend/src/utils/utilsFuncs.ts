@@ -1,5 +1,5 @@
-import { NewClassDisc } from "./classes";
-import { discFields, searchFieldsInterface, wishDiscFields } from "./interfaces";
+import { NewClassDisc } from "./classes.js";
+import { discFields, searchFieldsInterface, wishDiscFields } from "./interfaces.js";
 
 const bodyDom = document.querySelector('body') as HTMLBodyElement;
 

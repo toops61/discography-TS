@@ -1,19 +1,13 @@
-"use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
-Object.defineProperty(exports, "__esModule", { value: true });
-const express_1 = __importDefault(require("express"));
-const mongoose_1 = require("mongoose");
-const dotenv_1 = require("dotenv");
-(0, dotenv_1.config)();
-//const path = require('path');
-const app = (0, express_1.default)();
-const userRoutes_1 = __importDefault(require("./routes/userRoutes"));
-const discsRoutes_1 = __importDefault(require("./routes/discsRoutes"));
+import express from 'express';
+import { connect } from 'mongoose';
+import { config } from 'dotenv';
+config();
+const app = express();
+import userRoutes from './routes/userRoutes.js';
+import discsRoutes from './routes/discsRoutes.js';
 //import wishesRoutes from './routes/wishesRoutes';
 const uri = process.env.URI || '';
-(0, mongoose_1.connect)(uri)
+connect(uri)
     .then(() => console.log('Connexion à MongoDB réussie !'))
     .catch(error => console.log('Connexion à MongoDB échouée !', error));
 app.use((req, res, next) => {
@@ -22,9 +16,9 @@ app.use((req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
     next();
 });
-app.use(express_1.default.json());
+app.use(express.json());
 //app.use('/images', express.static(path.join(__dirname, 'images')));
-app.use('/', userRoutes_1.default);
-app.use('/', discsRoutes_1.default);
+app.use('/', userRoutes);
+app.use('/', discsRoutes);
 //app.use('/', wishesRoutes);
-exports.default = app;
+export default app;
