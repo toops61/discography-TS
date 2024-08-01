@@ -1,3 +1,29 @@
+.forms-container {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    justify-content: center;
+    width: 80%;
+    label {
+        margin-right: .3em;
+    }
+    .filter-field {
+        margin-right: 1em;
+        display: flex;
+        align-items: center;
+    }
+    select,input {
+        font-size: .8em;
+        field-sizing: content;
+        min-width: 3em;
+        min-height: 2vh;
+    }
+    @include tablette-version {
+        font-size: 2.5em;
+        margin-top: 2em;
+    }
+}
+
 input {
     color: black;
 }
@@ -7,18 +33,10 @@ select {
 }
 .filter-nav {
     display: flex;
-    font-size: 1.5em;
+    align-items: center;
     margin-top: .5em;
-    .filter-field {
-        margin-right: 1em;
-    }
-    label {
-        margin-right: .3em;
-    }
-    h2 {
-        font-size: 1em;
-    }
-    @include tablette-version {
-        margin-top: 3em;
-    }
+}
+
+.filter-selected {
+    @include flexCenter;
 }

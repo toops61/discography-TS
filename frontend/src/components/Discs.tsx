@@ -18,14 +18,14 @@ export default function Discs({disc,index,filterObject}:discsProps) {
         <tr className={index%2 === 0 ? "light-row" : ''}>
             <td className="disc-actions">
                 <div className="show-disc" onClick={() => dispatch(updateFullscreen({idShown:index,fullScreen:true}))} tabIndex={0}>
-                    <p className="label">Details</p>
+                    <p className="disc-label">Details</p>
                 </div>
                 {connected ? <Link to="/NewDisc" className="modify-disc" onClick={() => {
                     sessionStorage.setItem('modifiedDisc',JSON.stringify(disc));
                     sessionStorage.setItem('searchFields',JSON.stringify(filterObject));
                 }
                 }>
-                    <p className="label">Modifier</p>
+                    <p className="disc-label">Modifier</p>
                 </Link> : null}
             </td>
             <td className="artist-column">

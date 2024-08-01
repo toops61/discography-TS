@@ -10,15 +10,13 @@ button {
 .back {
     z-index: 5;
     position: absolute;
-    width: 30px;
-    height: 30px;
     top: .5em;
     left: .5em;
     &::before {
         @include icon('\f3e5',2em);
-        @include tablette-version {
+        /* @include tablette-version {
             font-size: 6vw;
-        }
+        } */
     }
     &.hide {
         display: none;
@@ -41,7 +39,7 @@ button {
     &::before {
         @include icon('\f303');
     }
-    &:hover .label {
+    &:hover .disc-label {
         opacity: 1;
         z-index: 50;
     }
@@ -55,7 +53,7 @@ button {
     &::before {
         @include icon('\f51f');
     }
-    &:hover .label {
+    &:hover .disc-label {
         opacity: 1;
         z-index: 50;
     }

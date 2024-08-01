@@ -38,6 +38,9 @@ body {
   height: 100%;
   @include flexCenter;
   font-size: 1.5vw;
+  @include tablette-version {
+    font-size: 2vw;
+  }
 }
 
 ul, li {

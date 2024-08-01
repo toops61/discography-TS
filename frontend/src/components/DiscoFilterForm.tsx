@@ -1,9 +1,8 @@
 import { ChangeEvent } from "react";
 import { filterFormProps } from "../utils/interfaces";
-import { useAppSelector } from "../redux/hooks";
 
 export default function DiscoFilterForm({filterObject,changeFilterObject}:filterFormProps) {
-    const total = useAppSelector(state => state.displayedSlice.displayedDiscs.length);
+    
 
     const handleChange : ((e:ChangeEvent) => void) = e => {
         const tempObject = {...filterObject};
@@ -25,10 +24,9 @@ export default function DiscoFilterForm({filterObject,changeFilterObject}:filter
             </select>
         </div>
         <div className="filter-field" tabIndex={0}>
-            <label htmlFor="filter">Filtre</label>
+            <label htmlFor="filter">filtre</label>
             <input type="text" name="filter" max="50" onChange={handleChange} value={filterObject.filter} required />
         </div>
-        <h2 tabIndex={0}>total : {total}</h2>
     </form>
   )
 }

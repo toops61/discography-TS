@@ -33,5 +33,7 @@
         border-radius: 50%;
         @include flexCenter;
     }
-    
+    @include tablette-version {
+        font-size: 2em;
+    }
 }

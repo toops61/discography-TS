@@ -10,11 +10,13 @@ import DiscographyFooter from './DiscographyFooter';
 import DiscoFilterForm from './DiscoFilterForm';
 import FullScreenDisc from './FullScreenDisc';
 import { updateDisplayed } from '../redux/displayedSlice';
+import DiscoSelectedForm from './DiscoSelectedForm';
 
 export default function Discography() {
     const connected = useAppSelector(state => state.generalParamsSlice.connected);
     const fullScreen = useAppSelector(state => state.fullScreenSlice.fullScreen);
     const displayedParams = useAppSelector(state => state.displayedSlice);
+    const total = useAppSelector(state => state.displayedSlice.displayedDiscs.length);
 
     const dispatch = useAppDispatch();
 
@@ -27,7 +29,8 @@ export default function Discography() {
             sort_up: true,
             sort_category: 'artist',
             filter: '',
-            filter_category: 'artist'
+            filter_category: 'artist',
+            filter_selected: []
         }
     );
 
@@ -64,10 +67,22 @@ export default function Discography() {
         const tempArray = array.map(disc => {return{...disc}});
         
         const filteredArray = tempArray.filter(disc => {
-            const searched = transformString(disc[filterObject.filter_category]);
+            let keep = true;
             let entered = filterObject.filter;
-            entered = transformString(entered);
-            return searched.includes(entered);
+            if (entered) {
+                const searched = transformString(disc[filterObject.filter_category]);
+                entered = transformString(entered);
+                keep = searched.includes(entered);
+                
+            }
+            if (filterObject.filter_selected.length) {
+                filterObject.filter_selected.map(filter => {
+                    const searched = transformString(disc[filter.selected_category]);
+                    const selected = transformString(filter.selected);
+                    keep = searched.includes(selected) && keep;
+                })
+            }
+            return keep;
         });
         return filteredArray;
     }
@@ -97,7 +112,7 @@ export default function Discography() {
     useEffect(() => {
         if (discsArray.length) {
             //filter discs
-            const tempArray = filterObject.filter ? filterDiscs(discsArray) : [...discsArray];
+            const tempArray = filterObject.filter || filterObject.filter_selected.length ? filterDiscs(discsArray) : [...discsArray];
             //then sort
             const sortedArray = sortDiscs(tempArray,filterObject);
             const displayed = filterObject.sort_up ? sortedArray : sortedArray.reverse();
@@ -133,13 +148,21 @@ export default function Discography() {
     <main className="disco-main">
         {fullScreen ? <FullScreenDisc /> : <></>}
         <Link className="back" to="/"></Link>
+        <h2 tabIndex={0} className="total-filtered">total : {total}</h2>
         <Link to={connected ? "/NewDisc" : "/Connect"} className="new-disc">New disc</Link>
-        <DiscoFilterForm 
-            filterObject={filterObject}
-            changeFilterObject={changeFilterObject}
-        />
+        <div className="forms-container">    
+            <DiscoFilterForm 
+                filterObject={filterObject}
+                changeFilterObject={changeFilterObject}
+            />
+            <DiscoSelectedForm 
+                filterObject={filterObject}
+                changeFilterObject={changeFilterObject}
+            />
+            
+        </div>
         <section className="title-container">
-            <h1 tabIndex={0}>Discography</h1>
+            <h1 tabIndex={0}>Discothèque</h1>
             <div className="max" tabIndex={0}>
                 <label htmlFor='filter_max'>Max affichés : </label>
                 <select name="filter_max" id="filter-max" onChange={e => dispatch(updateDisplayed({maxPerPage:parseInt(e.target.value)}))} >

@@ -1,5 +1,6 @@
 import { useQuery } from "react-query";
 import { wishDiscFields } from "./interfaces";
+import { getAllFormats, getAllStyles } from "./utilsFuncs";
 
 export const getDatabaseDiscs = async (querySelected:string) => {
     const url = `https://eu-west-2.aws.data.mongodb-api.com/app/data-nkugr/endpoint/${querySelected === 'discs' ? 'displayDiscs' : 'displayWishes'}`;
@@ -18,6 +19,12 @@ export const getDatabaseDiscs = async (querySelected:string) => {
         }
         const json = await response.json();
         //!discs && props.showAlert('Disques chargés','valid');
+        try {
+            json && getAllFormats(json);
+            json && getAllStyles(json);
+        } catch (error) {
+            console.log(error);
+        }
         return json;
     }
     catch(error) {

@@ -22,14 +22,6 @@ export interface queryResultType {
     message:string;
     data?:discFields|wishDiscFields|string;
 }
-/* export interface backendResultDisc {
-    message:string;
-    data?:discFields;
-}
-export interface backendResultWanted {
-    message:string;
-    data?:wishDiscFields;
-} */
 export interface backendResultUser {
     message:string;
     data?:userFields;
@@ -43,12 +35,18 @@ export interface discogsQuery {
     year:number;
 }
 
+interface selectedType {
+    selected_category: string;
+    selected: string;
+}
+
 export interface searchFieldsInterface {
-    [key:string]:string|boolean;
+    [key:string]:string|boolean|selectedType[];
     sort_up: boolean;
     sort_category: string;
     filter: string;
     filter_category: string;
+    filter_selected: selectedType[];
 }
 
 export interface userFields {
@@ -68,4 +66,8 @@ export interface discShownProps {
     disc:wishDiscFields;
     updateShown:(id:string) => void;
     showAlert:(message:string,type:string) => void;
+}
+
+export interface fetchDiscResultType {
+    
 }
