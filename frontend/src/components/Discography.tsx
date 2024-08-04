@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { discFields, queryGetFields, searchFieldsInterface } from '../utils/interfaces';
+import { discFields, queryGetFields } from '../utils/interfaces';
 import { getDatabaseDiscs } from '../utils/fetchFunctions';
 import { sortDiscs, transformString } from '../utils/utilsFuncs';
 import Discs from './Discs';
@@ -11,28 +11,18 @@ import DiscoFilterForm from './DiscoFilterForm';
 import FullScreenDisc from './FullScreenDisc';
 import { updateDisplayed } from '../redux/displayedSlice';
 import DiscoSelectedForm from './DiscoSelectedForm';
+import { updateFilters } from '../redux/filterSlice';
 
 export default function Discography() {
     const connected = useAppSelector(state => state.generalParamsSlice.connected);
     const fullScreen = useAppSelector(state => state.fullScreenSlice.fullScreen);
     const displayedParams = useAppSelector(state => state.displayedSlice);
     const total = useAppSelector(state => state.displayedSlice.displayedDiscs.length);
+    const filterObject = useAppSelector(state => state.filterSlice);
 
     const dispatch = useAppDispatch();
 
     const [discsArray, setDiscsArray] = useState<discFields[]>([]);
-
-    const [filterObject, setFilterObject] = useState<searchFieldsInterface>(
-        sessionStorage.searchFields ? 
-        JSON.parse(sessionStorage.getItem('searchFields') || '') : 
-        {
-            sort_up: true,
-            sort_category: 'artist',
-            filter: '',
-            filter_category: 'artist',
-            filter_selected: []
-        }
-    );
 
     const queryclient = useQueryClient();
 
@@ -89,10 +79,8 @@ export default function Discography() {
 
     const changeFilterCategory = (category:string) => {
         const object = filterObject.sort_category === category ? {...filterObject,sort_up: !filterObject.sort_up} : {...filterObject,sort_up: true,sort_category:category};
-        setFilterObject({...object});
+        dispatch(updateFilters(object));
     }
-
-    const changeFilterObject : ((obj:searchFieldsInterface) => void) = obj => setFilterObject(obj);
 
     const fillPagesArrays : ((total:number) => void) = total => {
         const tempArray : discFields[][] = [];
@@ -151,14 +139,8 @@ export default function Discography() {
         <h2 tabIndex={0} className="total-filtered">total : {total}</h2>
         <Link to={connected ? "/NewDisc" : "/Connect"} className="new-disc">New disc</Link>
         <div className="forms-container">    
-            <DiscoFilterForm 
-                filterObject={filterObject}
-                changeFilterObject={changeFilterObject}
-            />
-            <DiscoSelectedForm 
-                filterObject={filterObject}
-                changeFilterObject={changeFilterObject}
-            />
+            <DiscoFilterForm />
+            <DiscoSelectedForm />
             
         </div>
         <section className="title-container">

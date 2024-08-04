@@ -53,7 +53,7 @@ export const updateDiscs = (newData:discFields|wishDiscFields|string,array:wishD
     const wanted = ('format' in array[0]) ? false : true;
 
     const previousArray = [...array];
-    const newDiscModified = (typeof newData !== 'string') ? newData : new NewClassDisc('','',1970,'Folk Rock','cd','',false);
+    const newDiscModified = (typeof newData !== 'string') ? newData : new NewClassDisc('','','',1970,'Folk Rock','cd','',false);
 
     const oldDiscIndex = previousArray.findIndex(disc => deleteDisc ? (disc._id === newData) : (disc._id === newDiscModified._id && disc.format === newDiscModified.format));
 
@@ -68,8 +68,8 @@ export const sortDiscs = (array:discFields[],filterObject:searchFieldsInterface)
     switch (filterObject.sort_category) {
         case 'artist':
             sortedArray.sort((a,b) => {
-                const categoryA = a.artist.toUpperCase();
-                const categoryB = b.artist.toUpperCase();
+                const categoryA = a.artist_tri ? a.artist_tri.toUpperCase() : a.artist.toUpperCase();
+                const categoryB = b.artist_tri ? b.artist_tri.toUpperCase() : b.artist.toUpperCase();
                 if (categoryA < categoryB) {
                     return -1;
                 } else if (categoryA === categoryB) {

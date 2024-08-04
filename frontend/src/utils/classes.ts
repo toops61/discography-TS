@@ -3,6 +3,7 @@ export class NewClassDisc {
 
     constructor (
       public artist:string,
+      public artist_tri:string,
       public album:string,
       public year:number,
       public genre:string,

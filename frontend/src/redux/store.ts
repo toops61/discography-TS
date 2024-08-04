@@ -3,6 +3,7 @@ import generalParamsSlice from "./generalParamsSlice";
 import displayedSlice from "./displayedSlice";
 import fullScreenSlice from "./fullScreenSlice";
 import formsArraysSlice from "./formsArraysSlice";
+import filterSlice from "./filterSlice";
 //import logger from "redux-logger";
 
 const store = configureStore({
@@ -10,7 +11,8 @@ const store = configureStore({
         generalParamsSlice,
         displayedSlice,
         fullScreenSlice,
-        formsArraysSlice
+        formsArraysSlice,
+        filterSlice
     }
 });
 

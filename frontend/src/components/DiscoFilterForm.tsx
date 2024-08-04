@@ -1,16 +1,18 @@
-import { ChangeEvent, useState } from "react";
-import { filterFormProps } from "../utils/interfaces";
+import { ChangeEvent } from "react";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { updateFilters } from "../redux/filterSlice";
 
-export default function DiscoFilterForm({filterObject,changeFilterObject}:filterFormProps) {
-    const [inputValue, setInputValue] = useState('a');
+export default function DiscoFilterForm() {
+    const filterObject = useAppSelector(state => state.filterSlice);
+
+    const dispatch = useAppDispatch();
 
     const handleChange : ((e:ChangeEvent) => void) = e => {
         const tempObject = {...filterObject};
         const target = e.target as HTMLInputElement;
         const value = target.value;
-        setInputValue(value || 'a');
         tempObject[target.name] = value;
-        changeFilterObject({...tempObject});
+        dispatch(updateFilters(tempObject));
     }    
 
   return (
@@ -28,7 +30,7 @@ export default function DiscoFilterForm({filterObject,changeFilterObject}:filter
         <div className="filter-field" tabIndex={0}>
             <label htmlFor="filter">filtre</label>
             <div className="input-container">
-                <span>{inputValue}</span>
+                <span>{filterObject.filter || 'a'}</span>
                 <input type="text" name="filter" max="50" onChange={handleChange} value={filterObject.filter} required />
             </div>
         </div>

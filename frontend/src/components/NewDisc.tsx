@@ -12,7 +12,7 @@ export default function NewDisc({showAlert}:{showAlert:alertProps}) {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const initDisc = new NewClassDisc('','',1970,'Folk Rock','cd','',false);
+    const initDisc = new NewClassDisc('','','',1970,'Folk Rock','cd','',false);
 
     const [newDisc, setNewDisc] = useState(initDisc);
 
@@ -69,7 +69,7 @@ export default function NewDisc({showAlert}:{showAlert:alertProps}) {
         name.includes(' (') && (name = name.split(' (')[0]);
         let format = json.formats[0].name.toLowerCase();
         (format !== 'cd' && format !== 'vinyl') && (format = 'cd');
-        const newObject = new NewClassDisc(name,json.title,1970,'Folk Rock',format,'',false);      
+        const newObject = new NewClassDisc(name,name,json.title,1970,'Folk Rock',format,'',false);      
         const year = await musicBrainzSearch(newObject);
         newObject.year = (year && year > 1900 && year < 3000) ? year : json.year;
         setNewDisc({...newObject});
@@ -150,7 +150,7 @@ export default function NewDisc({showAlert}:{showAlert:alertProps}) {
     useEffect(() => {
         const modified : discFields = sessionStorage.modifiedDisc ? JSON.parse(sessionStorage.getItem('modifiedDisc') || '') : null;
         if (modified) {
-            const tempObject = new NewClassDisc('','',1970,'','','',false);
+            const tempObject = new NewClassDisc('','','',1970,'','','',false);
             const keysArray:string[] = Object.keys(modified);
             keysArray.map(key => tempObject[key] = modified[key]);
             setNewDisc({...tempObject});
@@ -179,6 +179,10 @@ export default function NewDisc({showAlert}:{showAlert:alertProps}) {
             <div className='disc-inputs' tabIndex={0}>
                 <label htmlFor='artist'>Artiste</label>
                 <input type='text' name='artist' max='50' value={newDisc.artist} onChange={handleChange} required />
+            </div>
+            <div className='disc-inputs' tabIndex={0}>
+                <label htmlFor='artist_tri'>'' tri</label>
+                <input type='text' name='artist_tri' max='50' value={newDisc.artist_tri} onChange={handleChange} required />
             </div>
             <div className='disc-inputs' tabIndex={0}>
                 <label htmlFor='album'>Album</label>

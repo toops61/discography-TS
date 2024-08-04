@@ -1,6 +1,7 @@
 export interface wishDiscFields {
     [key:string]:string|boolean|number|undefined;
     artist:string;
+    artist_tri?:string;
     album:string;
     genre:string;
     cover:string;
