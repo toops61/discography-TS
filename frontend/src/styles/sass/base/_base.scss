@@ -38,7 +38,7 @@ body {
   height: 100%;
   @include flexCenter;
   font-size: 1.5vw;
-  @include tablette-version {
+  @include portrait-version {
     font-size: 2vw;
   }
 }

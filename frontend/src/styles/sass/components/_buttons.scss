@@ -32,6 +32,17 @@ button {
         @include icon('\f139');
     }
 }
+.pages-updown {
+    @include flexCenter;
+    border: none;
+    padding: 0 .5em;
+    &::before {
+        @include icon('\f053');
+    }
+    &.up::before {
+        @include icon('\f054');
+    }
+}
 .modify-disc {
     position: relative;
     display: flex;

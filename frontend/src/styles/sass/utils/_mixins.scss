@@ -46,6 +46,12 @@
     }
 }
 
+@mixin portrait-version {
+    @media (orientation: portrait) {
+        @content;
+    }
+}
+
 @mixin iconBrands ($content: "\f09a", $font-size: 1.4em) {
     content: $content;
     font-family: 'Font Awesome 6 brands';

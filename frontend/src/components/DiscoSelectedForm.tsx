@@ -1,9 +1,9 @@
 import { ChangeEvent } from "react";
 import { filterFormProps } from "../utils/interfaces";
+import { useAppSelector } from "../redux/hooks";
 
 export default function DiscoSelectedForm({filterObject,changeFilterObject}:filterFormProps) {
-    const allFormats : string[] = sessionStorage.allFormats ? JSON.parse(sessionStorage.getItem('allFormats')!) : [];
-    const allStyles : string[] = sessionStorage.allFormats ? JSON.parse(sessionStorage.getItem('allStyles')!) : [];
+    const { allFormats,allStyles } = useAppSelector(state => state.formsArraysSlice);
 
     const handleChange : ((e:ChangeEvent) => void) = e => {
         const tempFilterObject = {...filterObject};

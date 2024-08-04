@@ -4,11 +4,14 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+    flex-wrap: wrap;
     padding: .5em 0 .5em 1em;
+    
     .page-displayed {
         display: flex;
         align-items: center;
-        margin-right: 6vw;
+        flex-wrap: wrap;
+        margin-right: 4vw;
         p {
             cursor: pointer;
             margin: 0 .5vw;
@@ -18,6 +21,10 @@
         }
     }
     .pages-container {
+        display: flex;
+        align-items: center;
+    }
+    .pages-updown-container {
         display: flex;
         align-items: center;
     }
@@ -33,7 +40,16 @@
         border-radius: 50%;
         @include flexCenter;
     }
-    @include tablette-version {
-        font-size: 2em;
+    @include portrait-version {
+        font-size: 1.8em;
+        flex-direction: column;
+        align-items: flex-start;
+        .legend {
+            margin-bottom: 1em;
+        }
+        .page-displayed {
+            width: 94%;
+            justify-content: space-between;
+        }
     }
 }

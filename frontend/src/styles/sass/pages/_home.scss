@@ -15,7 +15,7 @@
             cursor: pointer;
         }
     }
-    @include tablette-version {
+    @include portrait-version {
         width: 90%;
         font-size: 2em;
         ul {

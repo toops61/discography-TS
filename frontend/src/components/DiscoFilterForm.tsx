@@ -1,15 +1,17 @@
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState } from "react";
 import { filterFormProps } from "../utils/interfaces";
 
 export default function DiscoFilterForm({filterObject,changeFilterObject}:filterFormProps) {
-    
+    const [inputValue, setInputValue] = useState('a');
 
     const handleChange : ((e:ChangeEvent) => void) = e => {
         const tempObject = {...filterObject};
         const target = e.target as HTMLInputElement;
-        tempObject[target.name] = target.value;
+        const value = target.value;
+        setInputValue(value || 'a');
+        tempObject[target.name] = value;
         changeFilterObject({...tempObject});
-    }
+    }    
 
   return (
     <form className="filter-nav">
@@ -25,7 +27,10 @@ export default function DiscoFilterForm({filterObject,changeFilterObject}:filter
         </div>
         <div className="filter-field" tabIndex={0}>
             <label htmlFor="filter">filtre</label>
-            <input type="text" name="filter" max="50" onChange={handleChange} value={filterObject.filter} required />
+            <div className="input-container">
+                <span>{inputValue}</span>
+                <input type="text" name="filter" max="50" onChange={handleChange} value={filterObject.filter} required />
+            </div>
         </div>
     </form>
   )

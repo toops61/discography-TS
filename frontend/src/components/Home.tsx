@@ -6,6 +6,8 @@ import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { alertProps, queryGetFields } from '../utils/interfaces';
 import { RootState } from '../redux/store';
 import { useGetDiscs, useGetWantlist } from '../utils/fetchFunctions';
+import { getAllFormats, getAllStyles } from '../utils/utilsFuncs';
+import { updateFormsArrays } from '../redux/formsArraysSlice';
 
 export default function Home({showAlert}:{showAlert:alertProps}) {
     const connected = useAppSelector((state:RootState) => state.generalParamsSlice.connected);
@@ -32,6 +34,15 @@ export default function Home({showAlert}:{showAlert:alertProps}) {
 
     useEffect(() => {
         discs && handleData(discs,'discs');
+        if (discs) {
+            try {
+                const allFormats = getAllFormats(discs);
+                const allStyles = getAllStyles(discs);
+                dispatch(updateFormsArrays({allFormats,allStyles}));
+            } catch (error) {
+                console.log(error);
+            }
+        } 
     }, [discs]);
 
     useEffect(() => {

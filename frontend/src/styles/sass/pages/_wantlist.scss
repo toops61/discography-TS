@@ -89,7 +89,7 @@
             @include icon('\f139',2em);
         }
     }
-    @include tablette-version {
+    @include portrait-version {
         font-size: 3em;
         .close-window {
             right: 1em;

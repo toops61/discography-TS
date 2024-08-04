@@ -55,19 +55,20 @@ export default function DiscographyFooter({tableScrollTop}:{tableScrollTop:()=>v
                     {pagesDisplayed.map((_page,index) => <option value={index+1} key={uuidv4()}>{index+1}</option>)}
                 </select>
             </form>
-            <h3>pages : </h3>
-            <p onClick={() => pageSelected > 1 && changePageSelected(pageSelected-1)} tabIndex={0}>précédent</p>
-            <div className="pages-container">
-                {pagesDisplayed.map((_page,index) => {
-                    let classP = pageIdVisible.includes(index+1) ? "" : "hide";
-                    pageSelected === index + 1 && (classP = "page-selected");
-                    return (
-                        dotsCondition(index) ? <p className="dots" key={uuidv4()} tabIndex={0}>...</p> :
-                            <p className={classP} key={uuidv4()} onClick={() => changePageSelected(index + 1)} tabIndex={0}>{index+1}</p>
-                    )
-                })}
+            <div className="pages-updown-container">
+                <button onClick={() => pageSelected > 1 && changePageSelected(pageSelected-1)} className="pages-updown"></button>
+                <div className="pages-container">
+                    {pagesDisplayed.map((_page,index) => {
+                        let classP = pageIdVisible.includes(index+1) ? "" : "hide";
+                        pageSelected === index + 1 && (classP = "page-selected");
+                        return (
+                            dotsCondition(index) ? <p className="dots" key={uuidv4()} tabIndex={0}>...</p> :
+                                <p className={classP} key={uuidv4()} onClick={() => changePageSelected(index + 1)} tabIndex={0}>{index+1}</p>
+                        )
+                    })}
+                </div>
+                <button onClick={() => pageSelected < pagesDisplayed.length && changePageSelected(pageSelected+1)} className="pages-updown up"></button>
             </div>
-            <p onClick={() => pageSelected < pagesDisplayed.length && changePageSelected(pageSelected+1)} tabIndex={0}>suivant</p>
         </div> : null}
         <div className="arrow-up" tabIndex={0} onClick={tableScrollTop}></div>
     </footer>

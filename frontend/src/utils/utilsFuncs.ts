@@ -139,7 +139,7 @@ export const sortDiscs = (array:discFields[],filterObject:searchFieldsInterface)
 
 export const transformString : ((value:string|number|boolean|undefined) => string) = text => {
     let newString = text ? text.toString() : '';
-    newString = newString.toLowerCase();
+    newString = newString.toLowerCase().trim();
     newString = newString.replace(/[éèêë]/ig,'e');
     newString = newString.replace(/[âáàåäã]/ig,'a');
     newString = newString.replace(/[îìïí]/ig,'i');
@@ -148,20 +148,20 @@ export const transformString : ((value:string|number|boolean|undefined) => strin
     return newString;
 }
 
-export const getAllFormats = (json:discFields[]|wishDiscFields[]) => {
+export const getAllFormats = (json:discFields[]) => {
     const allFormatsArray : string[] = [];
     json.map(disc => {
         if (disc.format && typeof disc.format === 'string' && !allFormatsArray.includes(disc.format.toLowerCase())) allFormatsArray.push(disc.format.toLowerCase());
     })
     allFormatsArray.sort();
-    sessionStorage.setItem('allFormats',JSON.stringify(allFormatsArray));
+    return allFormatsArray;
 }
 
-export const getAllStyles = (json:discFields[]|wishDiscFields[]) => {
+export const getAllStyles = (json:discFields[]) => {
     const allStylesArray : string[] = [];
     json.map(disc => {
         if (disc.genre && typeof disc.genre === 'string' && !allStylesArray.includes(disc.genre.toLowerCase())) allStylesArray.push(disc.genre.toLowerCase());
     })
     allStylesArray.sort();
-    sessionStorage.setItem('allStyles',JSON.stringify(allStylesArray));
+    return allStylesArray;
 }
