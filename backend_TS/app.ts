@@ -7,7 +7,7 @@ const app: Express = express();
 
 import userRoutes from './routes/userRoutes.js';
 import discsRoutes from './routes/discsRoutes.js';
-//import wishesRoutes from './routes/wishesRoutes';
+import wishesRoutes from './routes/wishesRoutes.js';
 
 const uri = process.env.URI || '';
 
@@ -28,6 +28,6 @@ app.use(express.json());
 
 app.use('/', userRoutes);
 app.use('/', discsRoutes);
-//app.use('/', wishesRoutes);
+app.use('/', wishesRoutes);
 
 export default app;

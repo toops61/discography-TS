@@ -2,7 +2,7 @@ import {Schema,model} from 'mongoose';
 
 const discSchema = new Schema({
   artist: { type: String, required: true },
-  artist_tri: { type: String, required: true },
+  artist_tri: { type: String, required: false },
   album: { type: String, required: true },
   year: { type: Number, required: false },
   genre: { type: String, required: true },

@@ -5,7 +5,7 @@ config();
 const app = express();
 import userRoutes from './routes/userRoutes.js';
 import discsRoutes from './routes/discsRoutes.js';
-//import wishesRoutes from './routes/wishesRoutes';
+import wishesRoutes from './routes/wishesRoutes.js';
 const uri = process.env.URI || '';
 connect(uri)
     .then(() => console.log('Connexion à MongoDB réussie !'))
@@ -20,5 +20,5 @@ app.use(express.json());
 //app.use('/images', express.static(path.join(__dirname, 'images')));
 app.use('/', userRoutes);
 app.use('/', discsRoutes);
-//app.use('/', wishesRoutes);
+app.use('/', wishesRoutes);
 export default app;

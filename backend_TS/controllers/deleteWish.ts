@@ -3,7 +3,8 @@ import WishModel from '../models/wishModel.js';
 
 export default function deleteWish(req:Request, res:Response) {
     const discObject = req.body;
-    const id = discObject._id;
+    const id = discObject._id;    
+    
     WishModel.findOne({ _id: id})
         .then(_disc => {
             WishModel.deleteOne({ _id: id })
