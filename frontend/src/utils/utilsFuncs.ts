@@ -94,9 +94,13 @@ export const sortDiscs = (array:discFields[],filterObject:searchFieldsInterface)
             sortedArray.sort((a,b) => {
                 const categoryA = a.year;
                 const categoryB = b.year;
+                const artistA = a.artist_tri ? a.artist_tri.toUpperCase() : a.artist.toUpperCase();
+                const artistB = b.artist_tri ? b.artist_tri.toUpperCase() : b.artist.toUpperCase();
                 if (categoryA < categoryB) {
                     return -1;
-                } else {
+                } else if (categoryA === categoryB) {
+                    return artistA < artistB ? -1 : 1;
+                }  else {
                     return 1;
                 }
             });
