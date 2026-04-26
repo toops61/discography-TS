@@ -7,7 +7,7 @@ import { updateGeneralParams } from "../redux/generalParamsSlice";
 
 export default function CreateUser({showAlert}:{showAlert:alertProps}) {
     const [userObject, setUserObject] = useState<userFields>({
-        email:'',
+        login:'',
         password:''
     })
     const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ export default function CreateUser({showAlert}:{showAlert:alertProps}) {
     };
 
     const fetchPost = async () => {
-        const url = 'http://localhost:8000/login';
+        const url = 'https://discography-api.onrender.com/login';
 
         const request = {
             method: 'POST',
@@ -39,7 +39,7 @@ export default function CreateUser({showAlert}:{showAlert:alertProps}) {
             if (json.data && json.token) {
                 const userLogged:connectedFields = {
                     id: json.data._id,
-                    email: json.data.email,
+                    login: json.data.login,
                     token: json.token
                 }
                 dispatch(updateGeneralParams({connected:true}));
@@ -71,7 +71,7 @@ export default function CreateUser({showAlert}:{showAlert:alertProps}) {
     //API fetch requete POST pour formulaire
     const connectSubmit : ((e:FormEvent) => void) = e => {
         e.preventDefault();
-        if (userObject.email && userObject.password) refetch();
+        if (userObject.login && userObject.password) refetch();
     }
 
     useEffect(() => {
@@ -82,10 +82,14 @@ export default function CreateUser({showAlert}:{showAlert:alertProps}) {
     <>
     <Link className="back" to="/"></Link>
         <form className='connect-container'>
-            <div className='user-inputs' tabIndex={0}>
+            {<div className='user-inputs' tabIndex={0}>
+                <label htmlFor='login'>Login</label>
+                <input type='text' name='login' max='50' onChange={handleChange} value={userObject.email} required />
+            </div>}
+            {/* <div className='user-inputs' tabIndex={0}>
                 <label htmlFor='email'>Mail</label>
                 <input type='text' name='email' max='50' onChange={handleChange} value={userObject.email} required />
-            </div>
+            </div> */}
             <div className='user-inputs' tabIndex={0}>
                 <label htmlFor='password'>Mot de passe</label>
                 <input type='password' name='password' max='50' onChange={handleChange} value={userObject.password} required />

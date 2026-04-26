@@ -2,7 +2,7 @@ import { useQuery } from "react-query";
 import { wishDiscFields } from "./interfaces";
 
 export const getDatabaseDiscs = async (querySelected:string) => {
-    const url = `https://eu-west-2.aws.data.mongodb-api.com/app/data-nkugr/endpoint/${querySelected === 'discs' ? 'displayDiscs' : 'displayWishes'}`;
+    const url = `https://discography-api.onrender.com/${querySelected === 'discs' ? 'displayDiscs' : 'displayWishes'}`;
 
     const request = {
         method: 'GET',
@@ -62,7 +62,7 @@ export const fetchDisc = async (endpoint:string,token:string,newDisc:wishDiscFie
     }
 
     //API fetch requete POST pour formulaire
-    const url = `http://localhost:8000/${endpoint}`;
+    const url = `https://discography-api.onrender.com/${endpoint}`;
     const request = {
         method,
         body: JSON.stringify(updatedDisc),

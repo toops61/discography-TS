@@ -1,3 +1,5 @@
+export type dateType = string; //date format YYYY-MM-DDTHH:MM:SS
+
 export interface wishDiscFields {
     [key:string]:string|boolean|number|undefined;
     artist:string;
@@ -55,7 +57,7 @@ export interface userFields {
 }
 export interface connectedFields {
     id: string;
-    email: string;
+    login: string;
     token: string;
 }
 export type alertProps = (message:string,type:string) => void;
@@ -71,4 +73,16 @@ export interface discShownProps {
 
 export interface fetchDiscResultType {
     
+}
+
+export interface backendResultUser {
+    message:string;
+    data?:userFields;
+    token?:string;
+}
+export interface sessionType {
+    userId: string;
+    sessionId?: string;
+    createdAt?: dateType;
+    expiresAt?: dateType;
 }

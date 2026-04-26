@@ -18,7 +18,7 @@ export default function Home({showAlert}:{showAlert:alertProps}) {
 
     const handleData = (result:queryGetFields,querySelected:string) => {
         Array.isArray(result) && sessionStorage.setItem((querySelected === 'discs' ?'discStorage' : 'wantedStorage'),JSON.stringify(result));
-        result?.message && showAlert(result.message,'error');
+        !result?.data.length && showAlert(result.message,'error');
         return result;
     }
     
@@ -34,10 +34,12 @@ export default function Home({showAlert}:{showAlert:alertProps}) {
 
     useEffect(() => {
         discs && handleData(discs,'discs');
+        console.log('DISCS :',discs);
+        
         if (discs) {
             try {
-                const allFormats = getAllFormats(discs);
-                const allStyles = getAllStyles(discs);
+                const allFormats = getAllFormats(discs.data);
+                const allStyles = getAllStyles(discs.data);
                 dispatch(updateFormsArrays({allFormats,allStyles}));
             } catch (error) {
                 console.log(error);
