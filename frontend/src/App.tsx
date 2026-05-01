@@ -8,6 +8,7 @@ import Connect from "./components/Connect";
 import NewDisc from "./components/NewDisc";
 import Discography from "./components/Discography";
 import Wantlist from "./components/Wantlist";
+import { checkConnection } from "./utils/fetchFunctions";
 
 function App() {
   const generalParams = useAppSelector(state => state.generalParamsSlice);
@@ -22,15 +23,25 @@ function App() {
     }, 2000);
   };
 
+  const isConnectedFunc = async () => {
+    
+    const result = await checkConnection();
+    
+    if (result.success) {
+      dispatch(updateGeneralParams({connected:true}));
+    }
+  }
+
   useEffect(() => {
     window.addEventListener('resize', changeBodySize);
     changeBodySize();
+    
+    isConnectedFunc();
 
     return () => {
       window.removeEventListener('resize', changeBodySize);
     }
-  }, []);
-  
+  }, []);  
 
   return (
     <div className="App">

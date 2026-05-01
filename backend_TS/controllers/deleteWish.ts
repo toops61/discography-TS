@@ -1,21 +1,32 @@
 import { Request, Response } from 'express';
 import WishModel from '../models/wishModel.js';
 
-export default function deleteWish(req:Request, res:Response) {
+export default async function deleteWish(req: Request, res: Response) {
+  try {
     const discObject = req.body;
-    const id = discObject._id;    
+    const id = discObject._id;
+
+    const discDeleted = await WishModel.findByIdAndDelete(id);
+
+    console.log('disc wanted Deleted :',discDeleted);
     
-    WishModel.findOne({ _id: id})
-        .then(_disc => {
-            WishModel.deleteOne({ _id: id })
-            .then(() => {
-                const message = `Le disque a bien été supprimé`
-                res.status(200).json({ message, data:id })
-            })
-            .catch(() => res.status(400).json({ message: 'le disque n\'a pas pu être supprimé' }));
-        })
-        .catch(error => {
-            const message = 'Le disque n\'a pas pu être récupéré :-( Réessayez dans quelques instants.'
-            res.status(500).json({ message, data: error })
-        });        
+    if (!discDeleted) {
+      return res.status(404).json({
+        success: false,
+        message: "Disque introuvable"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: `Disque ${discDeleted.album} de ${discDeleted.artist} effacé ...`,
+      data: id
+    });
+
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Erreur, le disque n'a pas pu être effacé"
+    });
+  }
 }

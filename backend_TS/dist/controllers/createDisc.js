@@ -1,17 +1,25 @@
 import DiscModel from '../models/discModel.js';
-export default function createDisc(req, res) {
-    const disc = req.body;
-    delete disc._id;
-    DiscModel.create(Object.assign({}, disc))
-        .then(disc => {
-        const message = `Le disque est créé`;
-        res.json({
-            message,
-            data: disc
+export default async function createDisc(req, res) {
+    try {
+        const disc = req.body;
+        delete disc._id;
+        const newDisc = await DiscModel.create(Object.assign({}, disc));
+        if (!newDisc) {
+            return res.status(400).json({
+                success: false,
+                message: "Erreur lors de la création en base"
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Nouveau disque ajouté",
+            data: newDisc
         });
-    })
-        .catch(() => {
-        const message = 'Le disque n\'a pas pu être créé, réessayez dans un instant...';
-        res.status(500).json({ message });
-    });
+    }
+    catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: "Erreur, le disque n'a pas pu être créé"
+        });
+    }
 }

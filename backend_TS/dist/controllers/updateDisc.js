@@ -1,8 +1,25 @@
 import DiscModel from '../models/discModel.js';
-export default function updateDisc(req, res) {
-    const discObject = req.body;
-    const id = discObject._id;
-    DiscModel.updateOne({ _id: id }, discObject)
-        .then(() => res.status(200).json({ message: 'Disque modifié !', data: discObject }))
-        .catch(() => res.status(400).json({ message: 'Erreur, le disque n\'a pu être modifié' }));
+export default async function updateDisc(req, res) {
+    try {
+        const discObject = req.body;
+        const id = discObject._id;
+        const updatedDisc = await DiscModel.findByIdAndUpdate(id, discObject, { new: true });
+        if (!updatedDisc) {
+            return res.status(404).json({
+                success: false,
+                message: "Disque introuvable"
+            });
+        }
+        return res.status(200).json({
+            success: true,
+            message: "Disque modifié !",
+            data: updatedDisc
+        });
+    }
+    catch (error) {
+        return res.status(400).json({
+            success: false,
+            message: "Erreur, le disque n'a pu être modifié"
+        });
+    }
 }

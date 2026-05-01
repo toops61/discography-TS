@@ -21,14 +21,16 @@ export default function CreateUser({showAlert}:{showAlert:alertProps}) {
     };
 
     const fetchPost = async () => {
-        const url = 'https://discography-api.onrender.com/login';
+        //const url = 'https://discography-api.onrender.com/login';
+        const url = 'http://localhost:8000/login'
 
         const request = {
             method: 'POST',
             body: JSON.stringify(userObject),
             headers: {
-            "Content-Type": "application/json"
-            }
+                "Content-Type": "application/json"
+            },
+            credentials: "include" as RequestCredentials
         };
         try {
             const response = await fetch(url, request);
@@ -36,11 +38,10 @@ export default function CreateUser({showAlert}:{showAlert:alertProps}) {
                 throw new Error(`Erreur HTTP : ${response.status}`)
             }
             const json : backendResultUser = await response.json();
-            if (json.data && json.token) {
+            if (json.success && json.data) {
                 const userLogged:connectedFields = {
-                    id: json.data._id,
-                    login: json.data.login,
-                    token: json.token
+                    userId: json.data.userId,
+                    login: json.data.login
                 }
                 dispatch(updateGeneralParams({connected:true}));
                 showAlert(json.message,'valid');
@@ -62,10 +63,10 @@ export default function CreateUser({showAlert}:{showAlert:alertProps}) {
         staleTime: 1800000
     });
 
-    data?.token && sessionStorage.setItem('userStored',JSON.stringify(data));
+    data?.userId && sessionStorage.setItem('userStored',JSON.stringify(data));
 
-    data?.token && setTimeout(() => {
-        navigate("/NewDisc");
+    data?.userId && setTimeout(() => {
+        navigate("/Discography");
     }, 1000);
 
     //API fetch requete POST pour formulaire

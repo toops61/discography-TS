@@ -1,9 +1,13 @@
 import { Request, Response } from 'express';
-import UserModel, { userModelType } from '../models/userModel.js';
+import UserModel from '../models/userModel.js';
 import {compare} from 'bcrypt';
-import jwt from 'jsonwebtoken';
+import { connectToDB } from '../auth/connectToDB.js';
+import { addSession, checksSessionToken } from './sessionServerActions.js';
+import { SessionModel } from '../models/sessionModel.js';
+import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 
-export default async function connectUser(req:Request, res:Response) {
+/* export default async function connectUser(req:Request, res:Response) {
     const importedToken = process.env.TOKEN_SECRET || '';
     
     const responseFunc = async (user:userModelType) => {
@@ -22,7 +26,7 @@ export default async function connectUser(req:Request, res:Response) {
     }
 
     try {
-        const queryUser = await UserModel.findOne({ email: req.body.email });
+        const queryUser = await UserModel.findOne({ login: req.body.login });
         if (queryUser) {
             responseFunc(queryUser);
         } else {
@@ -32,4 +36,56 @@ export default async function connectUser(req:Request, res:Response) {
         const message = `L'utilisateur n'a pas pu être connecté.`;
         return res.status(500).json({ message, data: error })
     }
+} */
+
+export default async function connectUser(req:Request, res:Response) {
+  try {    
+    const { login, password } = req.body;
+
+    if (!login || !password) {
+      return res.status(400).json({ success: false });
+    }
+
+    await connectToDB();
+
+    const userFound = await UserModel.findOne({ login });
+
+    if (!userFound) {
+      return res.json({ success: false, message: "Utilisateur inexistant, créez un compte" });
+    }
+
+    const isLogged = await compare(password, userFound.password);
+
+    if (!isLogged) {
+      return res.json({ success: false, message: "Erreur de mot de passe" });
+    }
+
+    await addSession(String(userFound._id), req, res);
+
+    return res.json({
+      success: true,
+      message: `Vous êtes connecté, ${login}`,
+      data: {login,userId:userFound._id}
+    });
+
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ success: false });
+  }
+}
+
+export const disconnectUser = async (req:Request,res:Response) => {
+    await connectToDB();
+
+    const { sessionId } = await checksSessionToken(req);
+
+    await SessionModel.findByIdAndDelete(sessionId);
+
+    res.clearCookie("accessToken");
+    res.clearCookie("refreshToken");
+
+    return res.json({
+        success: true,
+        message: `Vous êtes déconnecté`
+    });
 }

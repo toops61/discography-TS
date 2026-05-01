@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import discsCase from '../assets/wanted_1.webp';
 import discsCase2 from '../assets/wanted_2.webp';
 import { useQueryClient } from "react-query";
-import { alertProps, queryGetFields, wishDiscFields } from "../utils/interfaces";
+import { alertProps, queryResultWantedType, wishDiscFields } from "../utils/interfaces";
 import { useAppSelector } from "../redux/hooks";
 import DiscShown from "./DiscShown";
 import { getDatabaseDiscs } from "../utils/fetchFunctions";
@@ -31,16 +31,10 @@ export default function Wantlist({showAlert}:{showAlert:alertProps}) {
         setCategoryShown([...tempArray]);
     }
 
-    /* const bodyScrollTop = () => {
-        mainRef?.current && console.log(mainRef.current);
-        //mainRef.scrollTop = 0;
-    } */
-
     const getStoredWanted = () => {
-        const discStorage = sessionStorage.wantedStorage ? JSON.parse(sessionStorage.getItem('wantedStorage') || '') : [];
-        /* const discsCache = queryclient.getQueryData('wantlist') ? queryclient.getQueryData('wantlist') : ''; */
-        const discsCache = queryclient.getQueryData<queryGetFields>('wantlist');
-        const newArray : wishDiscFields[] = discsCache?.data ? discsCache.data : discStorage;
+        const discStorage : wishDiscFields[] = sessionStorage.wantedStorage ? JSON.parse(sessionStorage.getItem('wantedStorage') || '') : [];
+        const discsCache = queryclient.getQueryData<queryResultWantedType>('wantlist');
+        const newArray = discsCache?.data ? discsCache.data : discStorage;
         setWantlistArray(newArray);
         !discsCache && queryclient.fetchQuery(
             ['wantlist'],
@@ -98,7 +92,7 @@ export default function Wantlist({showAlert}:{showAlert:alertProps}) {
                 disc={disc} 
                 updateShown={updateShown}
                 showAlert={showAlert} 
-                key={nanoid()} />
+                key={disc._id} />
             })}
         </section> : 
         <div className="categories-container">

@@ -25,10 +25,18 @@ export interface queryResultType {
     message:string;
     data?:discFields|wishDiscFields|string;
 }
+export interface queryResultDiscsType {
+    message:string;
+    data?:discFields[];
+}
+export interface queryResultWantedType {
+    message:string;
+    data?:wishDiscFields[];
+}
 export interface backendResultUser {
+    success:boolean;
     message:string;
     data?:userFields;
-    token?:string;
 }
 
 export interface discogsQuery {
@@ -56,9 +64,8 @@ export interface userFields {
     [key:string]:string;
 }
 export interface connectedFields {
-    id: string;
+    userId: string;
     login: string;
-    token: string;
 }
 export type alertProps = (message:string,type:string) => void;
 export interface filterFormProps {
@@ -70,19 +77,8 @@ export interface discShownProps {
     updateShown:(id:string) => void;
     showAlert:(message:string,type:string) => void;
 }
-
-export interface fetchDiscResultType {
-    
-}
-
 export interface backendResultUser {
     message:string;
     data?:userFields;
     token?:string;
-}
-export interface sessionType {
-    userId: string;
-    sessionId?: string;
-    createdAt?: dateType;
-    expiresAt?: dateType;
 }

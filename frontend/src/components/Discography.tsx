@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { useQueryClient } from 'react-query';
 import { Link } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
-import { discFields, queryGetFields } from '../utils/interfaces';
+import { discFields, queryResultDiscsType } from '../utils/interfaces';
 import { getDatabaseDiscs } from '../utils/fetchFunctions';
 import { sortDiscs, transformString } from '../utils/utilsFuncs';
 import Discs from './Discs';
@@ -27,9 +27,9 @@ export default function Discography() {
     const queryclient = useQueryClient();
 
     const getStoredDiscs = () => {
-        const discStorage = sessionStorage.discStorage ? JSON.parse(sessionStorage.getItem('discStorage') || '') : [];
-        const discsCache = queryclient.getQueryData<queryGetFields>('discs');
-        const newArray : discFields[] = discsCache?.data ? discsCache.data : discStorage;
+        const discStorage : discFields[] = sessionStorage.discStorage ? JSON.parse(sessionStorage.getItem('discStorage') || '') : [];
+        const discsCache = queryclient.getQueryData<queryResultDiscsType>('discs');
+        const newArray = discsCache?.data ? discsCache.data : discStorage;
         setDiscsArray(newArray);
         !discsCache && queryclient.fetchQuery(
             ['discs'],

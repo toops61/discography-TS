@@ -1,4 +1,4 @@
-import { alertProps, connectedFields, discFields, discogsQuery, wishDiscFields } from "../utils/interfaces";
+import { alertProps, discFields, discogsQuery, queryResultDiscsType, queryResultWantedType } from "../utils/interfaces";
 import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "react-query";
@@ -21,9 +21,10 @@ export default function NewDisc({showAlert}:{showAlert:alertProps}) {
     const discogRef = useRef<HTMLInputElement>(null);
 
     const queryclient = useQueryClient();
-    const user = queryclient.getQueryData<connectedFields>('user');
-    const previousArray = queryclient.getQueryData<discFields[]>('discs');
-    const previousWanted = queryclient.getQueryData<wishDiscFields[]>('wantlist');
+    const resultDiscs = queryclient.getQueryData<queryResultDiscsType>('discs');
+    const previousArray = resultDiscs?.data ?? [];
+    const resultWanted = queryclient.getQueryData<queryResultWantedType>('wantlist');
+    const previousWanted = resultWanted?.data ?? [];    
 
     const handleChange = (e:ChangeEvent) => {
         const tempObject = {...newDisc};
@@ -75,19 +76,23 @@ export default function NewDisc({showAlert}:{showAlert:alertProps}) {
         setNewDisc({...newObject});
     }
     
+    // update or create disc function
     const { mutate:updateDiscMutation,isLoading:discLoading } = useMutation(
-        () => {
+        () => {            
             const updateDisc = previousArray ? previousArray.find(e => e._id === newDisc._id && e.format === newDisc.format) : null;
-            const token = user?.token ? user.token : '';
-            return fetchDisc(updateDisc ? 'updateDisc' : 'newDisc',token,newDisc);
+            return fetchDisc(updateDisc ? 'updateDisc' : 'newDisc',newDisc);
         },
         {
             onSuccess: data => {
                 const previous = previousArray || [];
-                data.data && queryclient.setQueryData('discs',() => updateDiscs(data.data,previous,''));
-                showAlert(data.message,data.data ? 'valid' : 'error');
-                data.data && setNewDisc({...data.data});
-                if (!data.data && data.message.includes('401')) {
+                if (data.success && data.data) {
+                    queryclient.setQueryData('discs',() => updateDiscs(data.data,previous,''));
+                    setNewDisc({...data.data});
+                } 
+
+                showAlert(data.message,data.success ? 'valid' : 'error');                
+
+                if (!data.data && data.message.includes('reconnecter')) {
                     delete sessionStorage.userStored;
                     dispatch(updateGeneralParams({connected:false}));
                     queryclient.removeQueries('user');
@@ -99,15 +104,14 @@ export default function NewDisc({showAlert}:{showAlert:alertProps}) {
 
     const { mutate:deleteDiscMutation,isLoading:deleteLoading } = useMutation(
         () => {
-            const token = user?.token || '';
-            return fetchDisc('deleteDisc',token,newDisc);
+            return fetchDisc('deleteDisc',newDisc);
         }, 
         {
             onSuccess: data => {
                 const previous = previousArray || [];
                 data.data === newDisc._id && queryclient.setQueryData('discs',() => updateDiscs(data.data,previous,'delete'));
                 showAlert(data.message,data.data === newDisc._id ? 'valid' : 'error');
-                data.data && setTimeout(() => {
+                data.success && setTimeout(() => {
                     navigate("/Discography");
                 }, 1500);
             }
@@ -117,17 +121,20 @@ export default function NewDisc({showAlert}:{showAlert:alertProps}) {
     const { mutate:updateWantedMutation,isLoading:wantedLoading } = useMutation(
         () => {
             const updateDisc = previousWanted?.find(e => e._id === newDisc._id);
-            const token = user?.token || '';
-            return fetchDisc(updateDisc ? 'updateWish' : 'newWish',token,newDisc);
+            return fetchDisc(updateDisc ? 'updateWish' : 'newWish',newDisc);
         }, 
         {
             onSuccess: data => {
                 const previous = previousWanted || [];
-                data.data && queryclient.setQueryData('wantlist',() => updateDiscs(data.data,previous,''));
-                showAlert(data.message,data.data ? 'valid' : 'error');
-                data.data && setTimeout(() => {
-                    navigate("/Wantlist");
-                }, 1500);
+
+                showAlert(data.message,data.success ? 'valid' : 'error');
+
+                if (data.success && data.data) {
+                    queryclient.setQueryData('wantlist',() => updateDiscs(data.data,previous,''));
+                    setTimeout(() => {
+                        navigate("/Wantlist");
+                    }, 1500);
+                }
             }
         }
     );

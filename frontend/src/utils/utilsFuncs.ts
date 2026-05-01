@@ -60,7 +60,7 @@ export const updateDiscs = (newData:discFields|wishDiscFields|string,array:wishD
     oldDiscIndex === -1 ? previousArray.push(newDiscModified) : (deleteDisc ? previousArray.splice(oldDiscIndex,1) : previousArray.splice(oldDiscIndex,1,newDiscModified));
 
     sessionStorage.setItem((wanted ? 'wantedStorage' : 'discStorage'),JSON.stringify(previousArray));
-    return previousArray;
+    return { message:'',data:previousArray };
 }
 
 export const sortDiscs = (array:discFields[],filterObject:searchFieldsInterface) => {

@@ -1,33 +1,43 @@
-import express, { Express, Request, Response, NextFunction } from 'express';
-import {connect} from 'mongoose';
+import express, { Express } from 'express';
 import {config} from 'dotenv';
+import cors from "cors";
+import userRoutes from './routes/userRoutes.js';
+import discsRoutes from './routes/discsRoutes.js';
+import wishesRoutes from './routes/wishesRoutes.js';
+import { connectToDB } from './auth/connectToDB.js';
+import cookieParser from 'cookie-parser';
+import { checksCookiesConnection, updateToken } from './controllers/sessionServerActions.js';
+
 config();
 
 const app: Express = express();
 
-import userRoutes from './routes/userRoutes.js';
-import discsRoutes from './routes/discsRoutes.js';
-import wishesRoutes from './routes/wishesRoutes.js';
+const allowedOrigins = [
+  "http://localhost:5175",
+  "https://toops61.github.io"
+];
 
-const uri = process.env.URI || '';
+await connectToDB();
 
-connect(uri)
-    .then(() => console.log('Connexion à MongoDB réussie !'))
-    .catch(error => console.log('Connexion à MongoDB échouée !',error));
-
-app.use((req: Request, res: Response, next: NextFunction) => {
-    res.setHeader('Access-Control-Allow-Origin', '*');
-    res.setHeader('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content, Accept, Content-Type, Authorization');
-    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, PATCH, OPTIONS');
-    next();
-});
+app.use(cors({
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(new Error("Origin non autorisée par CORS"));
+  },
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true
+}));
 
 app.use(express.json());
 
-//app.use('/images', express.static(path.join(__dirname, 'images')));
+app.use(cookieParser());
 
 app.use('/', userRoutes);
 app.use('/', discsRoutes);
 app.use('/', wishesRoutes);
+app.post('/refresh', updateToken);
+app.post('/check', checksCookiesConnection);
 
 export default app;

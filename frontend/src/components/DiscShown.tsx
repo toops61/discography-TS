@@ -4,22 +4,19 @@ import { useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { fetchDisc } from "../utils/fetchFunctions";
 import { updateDiscs } from "../utils/utilsFuncs";
-import { connectedFields, discShownProps, wishDiscFields } from "../utils/interfaces";
-
-
+import { discShownProps, queryResultWantedType } from "../utils/interfaces";
 
 export default function DiscShown({disc,updateShown,showAlert}:discShownProps) {
 
         const connected = useAppSelector((state:RootState) => state.generalParamsSlice.connected);
 
         const queryclient = useQueryClient();
-        const user = queryclient.getQueryData<connectedFields>('user');
-        const previousWanted = queryclient.getQueryData<wishDiscFields[]>('wantlist') || [];
+        const resultWanted = queryclient.getQueryData<queryResultWantedType>('wantlist');
+        const previousWanted = resultWanted?.data ?? [];
 
         const { mutate:deleteWantedMutation } = useMutation(
             () => {
-                const token = user?.token ? user.token : '';
-                return fetchDisc('deleteWish',token,disc);
+                return fetchDisc('deleteWish',disc);
             }, 
             {
                 onSuccess: data => {

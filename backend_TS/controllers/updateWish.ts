@@ -1,10 +1,34 @@
 import { Request, Response } from 'express';
 import WishModel from '../models/wishModel.js';
 
-export default function updateWish(req:Request, res:Response) {
+export default async function updateWish(req: Request, res: Response) {
+  try {
     const discObject = req.body;
     const id = discObject._id;
-    WishModel.updateOne({ _id: id }, discObject)
-        .then(() => res.status(200).json({ message: 'Disque modifié !',data:discObject }))
-        .catch(() => res.status(400).json({ message : 'le disque n\'a pu être modifé' }));
+
+    const updatedDisc = await WishModel.findByIdAndUpdate(
+      id,
+      discObject,
+      { new: true }
+    );
+
+    if (!updatedDisc) {
+      return res.status(404).json({
+        success: false,
+        message: "Disque introuvable"
+      });
+    }
+
+    return res.status(200).json({
+      success: true,
+      message: "Disque modifié !",
+      data: updatedDisc
+    });
+
+  } catch (error) {
+    return res.status(400).json({
+      success: false,
+      message: "Erreur, le disque n'a pas pu être modifié"
+    });
+  }
 }

@@ -5,7 +5,7 @@ import { updateGeneralParams } from '../redux/generalParamsSlice';
 import { useAppDispatch, useAppSelector } from '../redux/hooks';
 import { alertProps, queryGetFields } from '../utils/interfaces';
 import { RootState } from '../redux/store';
-import { useGetDiscs, useGetWantlist } from '../utils/fetchFunctions';
+import { disconnectUser, useGetDiscs, useGetWantlist } from '../utils/fetchFunctions';
 import { getAllFormats, getAllStyles } from '../utils/utilsFuncs';
 import { updateFormsArrays } from '../redux/formsArraysSlice';
 
@@ -26,7 +26,13 @@ export default function Home({showAlert}:{showAlert:alertProps}) {
 
     const { isLoading:loadingWanted,data:wantlist } = useGetWantlist();
 
-    const deconnect = () => {
+    const disconnect = async () => {
+        const response = await disconnectUser(showAlert);
+
+        if (!response.success) return showAlert('la déconnexion a échoué, réessayez. '+(response.message || ''),'alert');
+
+        showAlert(response.message,'valid');
+
         delete sessionStorage.userStored;
         dispatch(updateGeneralParams({connected:false}));
         queryclient.removeQueries('user');
@@ -53,7 +59,7 @@ export default function Home({showAlert}:{showAlert:alertProps}) {
 
     useEffect(() => {
         dispatch(updateGeneralParams({isLoading:loadingDiscs || loadingWanted ? true : false}));
-    }, [loadingDiscs,loadingWanted]);
+    }, [loadingDiscs,loadingWanted]);    
 
   return (
     <section className="menu-container">
@@ -70,7 +76,7 @@ export default function Home({showAlert}:{showAlert:alertProps}) {
                 </Link> : null}
                 {!connected ? <Link to="/Connect" className="connect-page">
                     <li>Se connecter</li>
-                </Link> : <div className="connect-page" onClick={deconnect}>
+                </Link> : <div className="connect-page" onClick={disconnect}>
                     <p>Se déconnecter</p></div>}
             </ul>
         </nav>
