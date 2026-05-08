@@ -21,8 +21,8 @@ export default function CreateUser({showAlert}:{showAlert:alertProps}) {
     };
 
     const fetchPost = async () => {
-        //const url = 'https://discography-api.onrender.com/login';
-        const url = 'http://localhost:8000/login'
+        const url = 'https://discography-api.onrender.com/login';
+        //const url = 'http://localhost:8000/login'
 
         const request = {
             method: 'POST',

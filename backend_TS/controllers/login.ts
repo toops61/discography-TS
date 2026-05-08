@@ -81,8 +81,18 @@ export const disconnectUser = async (req:Request,res:Response) => {
 
     await SessionModel.findByIdAndDelete(sessionId);
 
-    res.clearCookie("accessToken");
-    res.clearCookie("refreshToken");
+    res.clearCookie("accessToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/"
+    });
+    res.clearCookie("refreshToken", {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+        path: "/"
+    });
 
     return res.json({
         success: true,

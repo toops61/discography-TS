@@ -62,8 +62,9 @@ export const fetchDisc = async (endpoint:string,newDisc:wishDiscFields) => {
     }
 
     //API fetch requete POST pour formulaire
-    //const url = `https://discography-api.onrender.com/${endpoint}`;
-    const url = `http://localhost:8000/${endpoint}`;
+    const url = `https://discography-api.onrender.com/${endpoint}`;
+    //const url = `http://localhost:8000/${endpoint}`;
+
     const request = {
         method,
         body: JSON.stringify(updatedDisc),
@@ -101,8 +102,8 @@ export const fetchDisc = async (endpoint:string,newDisc:wishDiscFields) => {
 }
 
 export const disconnectUser = async (showAlert:alertProps) => {
-        //const url = 'https://discography-api.onrender.com/logout';
-        const url = 'http://localhost:8000/logout'
+        const url = 'https://discography-api.onrender.com/logout';
+        //const url = 'http://localhost:8000/logout'
 
         const request = {
             method: 'POST',
@@ -126,8 +127,8 @@ export const disconnectUser = async (showAlert:alertProps) => {
     };
 
 export const handleRefresh = async () => {
-    //const url = 'https://discography-api.onrender.com/refresh';
-    const url = 'http://localhost:8000/refresh'
+    const url = 'https://discography-api.onrender.com/refresh';
+    //const url = 'http://localhost:8000/refresh'
 
     const request = {
         method: 'POST',
@@ -150,8 +151,9 @@ export const handleRefresh = async () => {
 }
 
 export const checkConnection = async () => {
-    //const url = `https://discography-api.onrender.com/check`;
-    const url = `http://localhost:8000/check`;
+    const url = `https://discography-api.onrender.com/check`;
+    //const url = `http://localhost:8000/check`;
+
     const request = {
         method:'POST',
         headers: {
